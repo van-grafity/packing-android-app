@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">Packing GLA</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Jhon Smith</string>
+    <string name="nav_header_subtitle">jhonsmith@gmail.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="menu_home">Home</string>
+    <string name="menu_transfer">Scan Transfer</string>
+    <string name="menu_receive">Scan Receive</string>
+    <string name="menu_load">Scan Load</string>
+    <string name="menu_logout">Logout</string>
+
+    <string name="server_maintenance">Server Maintenance</string>
+    <string name="timeout_message">Request time out</string>
+    <string name="session_over">Session Over</string>
+</resources>

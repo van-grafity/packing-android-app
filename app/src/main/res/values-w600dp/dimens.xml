@@ -1,0 +1,4 @@
+<resources>
+    <dimen name="fab_margin">48dp</dimen>
+    <dimen name="menu_home_dimen">90dp</dimen>
+</resources>
