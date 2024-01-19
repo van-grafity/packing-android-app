@@ -1,6 +1,14 @@
 package com.app.ivansuhendra.packinggla.utils;
 
+import android.app.ProgressDialog;
+import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+
 import com.app.ivansuhendra.packinggla.R;
+import com.github.ybq.android.spinkit.sprite.Sprite;
+import com.github.ybq.android.spinkit.style.DoubleBounce;
+import com.github.ybq.android.spinkit.style.FoldingCube;
 
 public class GlobalVars {
     public static final String PALLET_TRANSFER_LIST = "pallet transfer list";
@@ -19,5 +27,20 @@ public class GlobalVars {
         } else {
             return R.drawable.round_bg_red;
         }
+    }
+
+    public static ProgressDialog pgDialog(Context context) {
+        ProgressDialog progressDialog = new ProgressDialog(context);
+        Sprite doubleBounce = new FoldingCube();
+        progressDialog.setIndeterminateDrawable(doubleBounce);
+        progressDialog.show();
+        if (progressDialog.getWindow() != null) {
+            progressDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        }
+        progressDialog.setContentView(R.layout.progress_dialog);
+        progressDialog.setIndeterminate(true);
+        progressDialog.setCancelable(false);
+        progressDialog.setCanceledOnTouchOutside(false);
+        return progressDialog;
     }
 }

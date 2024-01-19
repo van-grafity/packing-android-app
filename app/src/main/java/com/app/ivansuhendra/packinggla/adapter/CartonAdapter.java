@@ -11,25 +11,30 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.app.ivansuhendra.packinggla.R;
-import com.app.ivansuhendra.packinggla.model.TransferNote;
+import com.app.ivansuhendra.packinggla.model.Carton;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class CartonAdapter extends RecyclerView.Adapter<CartonAdapter.CartonViewHolder> {
-    private List<TransferNote> mItems;
+    private List<Carton> mItems;
     private Context mContext;
     private CartonAdapter.onItemClickListener mClicked;
-    private String mPalletNo;
 
-    public CartonAdapter(Context mContext, List<TransferNote> mItems, String palletNo, CartonAdapter.onItemClickListener clicked) {
+    public CartonAdapter(Context mContext, List<Carton> mItems, CartonAdapter.onItemClickListener clicked) {
         this.mContext = mContext;
         this.mItems = mItems;
-        this.mPalletNo = palletNo;
         this.mClicked = clicked;
     }
 
+    public void setData(ArrayList<Carton> carton) {
+        mItems.clear(); // Clear existing data
+        mItems.addAll(carton); // Add new data
+        notifyDataSetChanged(); // Notify the adapter that the data set has changed
+    }
+
     public interface onItemClickListener {
-        void onClick(View view, int position, TransferNote transferNote);
+        void onClick(View view, int position, Carton carton);
     }
 
     @NonNull
@@ -41,8 +46,13 @@ public class CartonAdapter extends RecyclerView.Adapter<CartonAdapter.CartonView
 
     @Override
     public void onBindViewHolder(@NonNull CartonAdapter.CartonViewHolder holder, int position) {
-        TransferNote model = mItems.get(position);
-        holder.tvSerialNumber.setText(String.valueOf(model.getSerialNumber()));
+        Carton model = mItems.get(position);
+        holder.tvCartonNo.setText("Carton No. " + model.getCartonNo());
+        holder.tvBuyer.setText(model.getBuyer());
+        holder.tvPo.setText(model.getPoNo());
+        holder.tvGl.setText(model.getGlNo());
+        holder.tvContent.setText(model.getContent());
+        holder.tvQty.setText(model.getPcs());
 
         holder.btnItemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -64,13 +74,24 @@ public class CartonAdapter extends RecyclerView.Adapter<CartonAdapter.CartonView
     }
 
     public static class CartonViewHolder extends RecyclerView.ViewHolder {
-        TextView tvSerialNumber;
+        TextView tvCartonNo;
+        TextView tvBuyer;
+        TextView tvPo;
+        TextView tvGl;
+        TextView tvContent;
+        TextView tvQty;
         CardView btnItemView;
 
         public CartonViewHolder(@NonNull View itemView) {
             super(itemView);
-            tvSerialNumber = itemView.findViewById(R.id.tv_serial_number);
-            btnItemView = itemView.findViewById(R.id.btn_add_carton);
+            tvCartonNo = itemView.findViewById(R.id.tv_carton_no);
+            tvBuyer = itemView.findViewById(R.id.tv_buyer);
+            tvPo = itemView.findViewById(R.id.tv_po);
+            tvGl = itemView.findViewById(R.id.tv_gl);
+            tvContent = itemView.findViewById(R.id.tv_content);
+            tvQty = itemView.findViewById(R.id.tv_qty);
+
+            btnItemView = itemView.findViewById(R.id.btnCarton);
         }
     }
 }

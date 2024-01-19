@@ -11,11 +11,18 @@ public class APIModels {
     @SerializedName("pallet_transfer")
     private PalletTransfer palletTransfer;
 
+    @SerializedName("transfer_note")
+    private TransferNote transferNote;
+
     public ArrayList<PalletTransfer> getPalletTransfers() {
         return palletTransfers;
     }
 
     public PalletTransfer getPalletTransfer() {
         return palletTransfer;
+    }
+
+    public TransferNote getTransferNote() {
+        return transferNote;
     }
 }

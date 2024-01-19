@@ -1,5 +1,6 @@
 package com.app.ivansuhendra.packinggla;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -31,7 +32,7 @@ public class PalletTransferDetailActivity extends AppCompatActivity {
     private PalletTransfer mPallet;
     private TransferViewModel transferViewModel;
     private TransferNoteAdapter mAdapter;
-
+    private ProgressDialog progressDialog;
     private enum IntentType {
         EDIT_TRANSFER_NOTE,
         NEW_TRANSFER_NOTE
@@ -113,22 +114,23 @@ public class PalletTransferDetailActivity extends AppCompatActivity {
     private void updateViewState(ViewState viewState) {
         switch (viewState) {
             case LOADING:
-                binding.contentLoading.setVisibility(View.VISIBLE);
-                binding.contentLoading.show();
                 binding.rvTransferNote.setVisibility(View.GONE);
                 binding.tvNoData.setVisibility(View.GONE);
+                progressDialog = GlobalVars.pgDialog(PalletTransferDetailActivity.this);
                 break;
             case DATA_AVAILABLE:
                 binding.rvTransferNote.setVisibility(View.VISIBLE);
                 binding.tvNoData.setVisibility(View.GONE);
-                binding.contentLoading.hide();
-                binding.contentLoading.setVisibility(View.GONE);
+                if (progressDialog != null && progressDialog.isShowing()) {
+                    progressDialog.cancel();
+                }
                 break;
             case NO_DATA:
                 binding.rvTransferNote.setVisibility(View.GONE);
                 binding.tvNoData.setVisibility(View.VISIBLE);
-                binding.contentLoading.hide();
-                binding.contentLoading.setVisibility(View.GONE);
+                if (progressDialog != null && progressDialog.isShowing()) {
+                    progressDialog.cancel();
+                }
                 break;
         }
     }

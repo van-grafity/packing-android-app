@@ -1,5 +1,6 @@
 package com.app.ivansuhendra.packinggla.ui.transfer;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
@@ -22,6 +23,8 @@ import androidx.paging.PagedList;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import com.app.ivansuhendra.packinggla.EditTransferNoteActivity;
+import com.app.ivansuhendra.packinggla.MainActivity;
 import com.app.ivansuhendra.packinggla.NewPalletTransferActivity;
 import com.app.ivansuhendra.packinggla.PalletTransferDetailActivity;
 import com.app.ivansuhendra.packinggla.ScanQrActivity;
@@ -43,6 +46,8 @@ public class TransferFragment extends Fragment {
     private FragmentTransferBinding binding;
     private PalletTransferViewModel palletTransferViewModel;
     private PalletTransferAdapter palletTransferAdapter;
+    private ProgressDialog progressDialog;
+
     private Snackbar snackbar;
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -53,6 +58,11 @@ public class TransferFragment extends Fragment {
             // Tampilkan Snackbar dengan aksi refresh jika tidak ada koneksi
             showNoNetworkMessage();
         } else {
+            getActivity().runOnUiThread(new Runnable() {
+                public void run() {
+                    progressDialog = GlobalVars.pgDialog((MainActivity)getActivity());
+                }
+            });
             setupRecyclerView();
 
             binding.btnNewPalletTransfer.setOnClickListener(new View.OnClickListener() {
@@ -63,6 +73,8 @@ public class TransferFragment extends Fragment {
                     startActivity(intent);
                 }
             });
+
+
 
             transferViewModel = new ViewModelProvider(this).get(TransferViewModel.class);
 
@@ -139,10 +151,18 @@ public class TransferFragment extends Fragment {
 
     private void loadDataTransferList() {
 //        snackbar.dismiss(); // Tutup Snackbar setelah berhasil reload
+
         palletTransferViewModel = new ViewModelProvider(this).get(PalletTransferViewModel.class);
         palletTransferViewModel.getPagedListLiveData().observe(getViewLifecycleOwner(), new Observer<PagedList<PalletTransfer>>() {
             @Override
             public void onChanged(PagedList<PalletTransfer> palletTransfers) {
+                getActivity().runOnUiThread(new Runnable() {
+                    public void run() {
+                        if (progressDialog != null && progressDialog.isShowing()) {
+                            progressDialog.cancel();
+                        }
+                    }
+                });
                 palletTransferAdapter.submitList(palletTransfers);
             }
         });

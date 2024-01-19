@@ -8,6 +8,7 @@ import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
 import retrofit2.http.Part;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
@@ -24,5 +25,9 @@ public interface APIService {
     Call<APIResponse> getPalletTransferDetail(@Path("id") int id);
 
     @GET("pallet-transfer/"+ "transfer-note-edit/" + "{id}")
-    Call<APIResponse> getPalletTransfer(@Path("id") int id);
+    Call<APIResponse> getPalletTransferNote(@Path("id") int id);
+
+    @FormUrlEncoded
+    @PUT("pallet-transfer/" + "transfer-note-update")
+    Call<APIResponse> updateTransferNote(@Field("pallet_transfer_id") int palletTransferId, @Field("transfer_note_id") int transferNoteId, @Field("carton_barcode_id[]") Integer[] barcodeIds);
 }

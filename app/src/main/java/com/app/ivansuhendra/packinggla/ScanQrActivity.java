@@ -62,7 +62,10 @@ public class ScanQrActivity extends AppCompatActivity {
                             startActivity(intent);
                             finish();
                         } else {
-                            startActivity(new Intent(ScanQrActivity.this, MainActivity.class));
+                            Intent resultIntent = new Intent();
+                            resultIntent.putExtra("scannedResult", message);
+                            setResult(RESULT_OK, resultIntent);
+                            finish();
                         }
                     }
                 });

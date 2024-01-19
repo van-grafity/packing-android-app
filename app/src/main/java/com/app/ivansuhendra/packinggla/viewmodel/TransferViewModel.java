@@ -37,8 +37,13 @@ public class TransferViewModel extends ViewModel {
         return palletTransferResponseData;
     }
 
-    public LiveData<APIResponse> getPalletTransferLiveData(int id) {
-        palletTransferResponseData = palletTransferRepository.getPalletTransferDetailResponse(id);
+    public LiveData<APIResponse> getPalletTransferNoteLiveData(int id) {
+        palletTransferResponseData = palletTransferRepository.getPalletTransferNoteResponse(id);
+        return palletTransferResponseData;
+    }
+
+    public LiveData<APIResponse> updateTransferNoteLiveData(int palletTransferId, int transferNoteId, Integer[] barcodeIds) {
+        palletTransferResponseData = palletTransferRepository.updateTransferNoteResponse(palletTransferId, transferNoteId, barcodeIds);
         return palletTransferResponseData;
     }
 }

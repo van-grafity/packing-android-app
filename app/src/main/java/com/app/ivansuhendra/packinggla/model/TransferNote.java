@@ -5,6 +5,8 @@ import android.os.Parcelable;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
+
 public class TransferNote implements Parcelable {
     private int id;
     @SerializedName("serial_number")
@@ -21,6 +23,8 @@ public class TransferNote implements Parcelable {
     private String receiveAt;
     @SerializedName("created_at")
     private String createAt;
+    @SerializedName("cartons")
+    private ArrayList<Carton> carton;
 
     public int getId() {
         return id;
@@ -54,6 +58,11 @@ public class TransferNote implements Parcelable {
         return createAt;
     }
 
+    public ArrayList<Carton> getCarton() {
+        return carton;
+    }
+
+
     @Override
     public int describeContents() {
         return 0;
@@ -69,6 +78,7 @@ public class TransferNote implements Parcelable {
         dest.writeString(this.receiveBy);
         dest.writeString(this.receiveAt);
         dest.writeString(this.createAt);
+        dest.writeList(this.carton);
     }
 
     public void readFromParcel(Parcel source) {
@@ -80,6 +90,8 @@ public class TransferNote implements Parcelable {
         this.receiveBy = source.readString();
         this.receiveAt = source.readString();
         this.createAt = source.readString();
+        this.carton = new ArrayList<Carton>();
+        source.readList(this.carton, Carton.class.getClassLoader());
     }
 
     public TransferNote() {
@@ -94,6 +106,8 @@ public class TransferNote implements Parcelable {
         this.receiveBy = in.readString();
         this.receiveAt = in.readString();
         this.createAt = in.readString();
+        this.carton = new ArrayList<Carton>();
+        in.readList(this.carton, Carton.class.getClassLoader());
     }
 
     public static final Creator<TransferNote> CREATOR = new Creator<TransferNote>() {

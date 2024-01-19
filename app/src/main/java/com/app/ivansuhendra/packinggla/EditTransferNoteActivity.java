@@ -1,7 +1,17 @@
 package com.app.ivansuhendra.packinggla;
 
+import android.app.ProgressDialog;
+import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Toast;
@@ -12,19 +22,28 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import com.app.ivansuhendra.packinggla.adapter.CartonAdapter;
 import com.app.ivansuhendra.packinggla.databinding.ActivityEditTransferNoteBinding;
-import com.app.ivansuhendra.packinggla.databinding.ActivityPalletTransferDetailBinding;
 import com.app.ivansuhendra.packinggla.model.APIResponse;
+import com.app.ivansuhendra.packinggla.model.Carton;
 import com.app.ivansuhendra.packinggla.model.PalletTransfer;
 import com.app.ivansuhendra.packinggla.model.TransferNote;
 import com.app.ivansuhendra.packinggla.utils.GlobalVars;
 import com.app.ivansuhendra.packinggla.viewmodel.TransferViewModel;
+import com.google.android.material.snackbar.Snackbar;
+
+import java.util.ArrayList;
 
 public class EditTransferNoteActivity extends AppCompatActivity {
+
     private ActivityEditTransferNoteBinding binding;
+    private static final int REQUEST_SCAN_QR = 1; // Unique request code
     private TransferNote transferNote;
     private PalletTransfer palletTransfer;
     private TransferViewModel transferViewModel;
+    private CartonAdapter mAdapter;
+    private ProgressDialog progressDialog;
+    private PackingDBHelper mDbHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,7 +53,7 @@ public class EditTransferNoteActivity extends AppCompatActivity {
 
         transferNote = getIntent().getParcelableExtra(GlobalVars.TRANSFER_NOTE_LIST);
         palletTransfer = getIntent().getParcelableExtra(GlobalVars.PALLET_TRANSFER_LIST);
-
+        mDbHelper = new PackingDBHelper(this);
         binding.tvTransferNoteSerial.setText(transferNote.getSerialNumber());
         binding.tvFrom.setText(palletTransfer.getLocationFrom());
         binding.tvPalletNo.setText(palletTransfer.getPalletSerialNumber());
@@ -45,28 +64,230 @@ public class EditTransferNoteActivity extends AppCompatActivity {
         binding.btnAddCarton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(EditTransferNoteActivity.this, ScanQrActivity.class));
+                Intent intent = new Intent(EditTransferNoteActivity.this, ScanQrActivity.class);
+                startActivityForResult(intent, REQUEST_SCAN_QR);
             }
         });
 
-        binding.btnEditTransferNote.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        // Call the modified checkAndLoadData method
+        checkAndLoadDataWithDelay();
 
+        // Integer[] barcodeId = new Integer[1];
+        // barcodeId[0] = 2260;
+        // binding.btnEditTransferNote.setOnClickListener(new View.OnClickListener() {
+        //     @Override
+        //     public void onClick(View v) {
+        //         transferViewModel.updateTransferNoteLiveData(1, 6, barcodeId).observe(EditTransferNoteActivity.this, new Observer<APIResponse>() {
+        //             @Override
+        //             public void onChanged(APIResponse apiResponse) {
+        //                 Toast.makeText(EditTransferNoteActivity.this, apiResponse.getMessage(), Toast.LENGTH_SHORT).show();
+        //                 if (progressDialog != null && progressDialog.isShowing()) {
+        //                     progressDialog.cancel();
+        //                 }
+        //             }
+        //         });
+        //     }
+        // });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == REQUEST_SCAN_QR && resultCode == RESULT_OK) {
+            String scannedResult = data.getStringExtra("scannedResult");
+            // Process the scannedResult as needed in EditTransferNoteActivity
+            Toast.makeText(EditTransferNoteActivity.this, scannedResult, Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void checkAndLoadDataWithDelay() {
+        // Create a Handler on the main thread
+        Handler handler = new Handler(Looper.getMainLooper());
+
+        // Use the handler to delay the loading of data for a specific duration (e.g., 2000 milliseconds)
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                checkAndLoadData();
+            }
+        }, 2000); // Adjust the delay duration as needed
+    }
+
+    private void checkAndLoadData() {
+        if (isNetworkConnected()) {
+            // If connected to the network, proceed with loading data
+            provideDbDataFromServer();
+        } else {
+            // If not connected, show Snackbar with refresh action
+            showNoNetworkSnackbar();
+            if (progressDialog != null && progressDialog.isShowing()) {
+                progressDialog.cancel();
+            }
+        }
+    }
+
+    private void loadDataFromServer() {
+        progressDialog.show(); // Show loading indicator
+
+        transferViewModel.getPalletTransferNoteLiveData(transferNote.getId()).observe(this, new Observer<APIResponse>() {
+            @Override
+            public void onChanged(APIResponse apiResponse) {
+                // Update the adapter data and notify the changes
+                mAdapter.setData(apiResponse.getData().getTransferNote().getCarton());
+                mAdapter.notifyDataSetChanged();
+
+                if (progressDialog != null && progressDialog.isShowing()) {
+                    progressDialog.cancel();
+                }
             }
         });
     }
 
+    // provideDbDataFromServer
+    private void provideDbDataFromServer() {
+        progressDialog.show(); // Show loading indicator
+
+        transferViewModel.getPalletTransferNoteLiveData(transferNote.getId()).observe(this, new Observer<APIResponse>() {
+            @Override
+            public void onChanged(APIResponse apiResponse) {
+                for (Carton carton : apiResponse.getData().getTransferNote().getCarton()) {
+                    mDbHelper.insertCarton(carton);
+                }
+                // Update the adapter data and notify the changes
+                mAdapter.setData(mDbHelper.getAllCarton());
+                mAdapter.notifyDataSetChanged();
+
+                if (progressDialog != null && progressDialog.isShowing()) {
+                    progressDialog.cancel();
+                }
+            }
+        });
+    }
+
+    private void showNoNetworkSnackbar() {
+        Snackbar snackbar = Snackbar.make(binding.getRoot(), "No internet connection", Snackbar.LENGTH_INDEFINITE);
+        snackbar.setAction("Refresh", new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // When the user clicks on refresh, check network and reload data
+                checkAndLoadData();
+            }
+        });
+        snackbar.show();
+    }
+
+    private boolean isNetworkConnected() {
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        if (cm != null) {
+            NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+            return activeNetwork != null && activeNetwork.isConnectedOrConnecting();
+        }
+        return false;
+    }
 
     private void initializeData() {
         binding.rvCarton.setLayoutManager(new GridLayoutManager(this, 2, LinearLayoutManager.VERTICAL, false));
 
         transferViewModel = new ViewModelProvider(this).get(TransferViewModel.class);
-        transferViewModel.getPalletTransferLiveData(palletTransfer.getId()).observe(EditTransferNoteActivity.this, new Observer<APIResponse>() {
+        progressDialog = GlobalVars.pgDialog(EditTransferNoteActivity.this);
+
+        // Initialize the adapter here
+        mAdapter = new CartonAdapter(EditTransferNoteActivity.this, new ArrayList<>(), new CartonAdapter.onItemClickListener() {
             @Override
-            public void onChanged(APIResponse apiResponse) {
-                Toast.makeText(EditTransferNoteActivity.this, apiResponse.getMessage(), Toast.LENGTH_SHORT).show();
+            public void onClick(View view, int position, Carton carton) {
+                // Handle item click if needed
             }
         });
+
+        binding.rvCarton.setAdapter(mAdapter);
     }
+    @Override
+    protected void onPause() {
+        super.onPause();
+        clearDatabase();
+    }
+
+    private void clearDatabase() {
+        // Delete all data from the "carton" table in the database
+        mDbHelper.clearCartonTable();
+    }
+
+    public class DBHelper extends SQLiteOpenHelper {
+            
+            public DBHelper(Context context) {
+                super(context, "PackingGLA.db", null, 1);
+            }
+    
+            @Override
+            public void onCreate(SQLiteDatabase db) {
+                db.execSQL("CREATE TABLE IF NOT EXISTS carton (carton_id INTEGER PRIMARY KEY AUTOINCREMENT, carton_barcode TEXT, po_number TEXT, packinglist_id INTEGER, pl_number TEXT, carton_number TEXT, gl_number TEXT, buyer_name TEXT, season TEXT, content TEXT, total_pcs INTEGER, flag_packed TEXT)");
+            }
+
+            @Override
+            public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+                db.execSQL("DROP TABLE IF EXISTS carton");
+                onCreate(db);
+            }
+        }
+
+        
+        
+        public class PackingDBHelper extends DBHelper {
+            public PackingDBHelper(Context context) {
+                super(context);
+            }
+            
+            // pertama di load data dari server ke db
+            public void insertCarton(Carton carton) {
+                SQLiteDatabase db = this.getWritableDatabase();
+                ContentValues contentValues = new ContentValues();
+                contentValues.put("carton_barcode", carton.getCartonBarcode());
+                contentValues.put("po_number", carton.getPoNo());
+                contentValues.put("packinglist_id", carton.getPackingListId());
+                contentValues.put("pl_number", carton.getPlNo());
+                contentValues.put("carton_number", carton.getCartonNo());
+                contentValues.put("gl_number", carton.getGlNo());
+                contentValues.put("buyer_name", carton.getBuyer());
+                contentValues.put("season", carton.getSeason());
+                contentValues.put("content", carton.getContent());
+                contentValues.put("total_pcs", carton.getPcs());
+                contentValues.put("flag_packed", carton.getPacked());
+                db.insert("carton", null, contentValues);
+                db.close();
+            }
+
+            // kedua di load data dari db ke adapter
+            public ArrayList<Carton> getAllCarton() {
+                ArrayList<Carton> cartonArrayList = new ArrayList<>();
+                SQLiteDatabase db = this.getReadableDatabase();
+                Cursor cursor = db.rawQuery("SELECT * FROM carton", null);
+                if (cursor.moveToFirst()) {
+                    do {
+                        Carton carton = new Carton();
+                        carton.setCartonBarcode(cursor.getString(1));
+                        carton.setPoNo(cursor.getString(2));
+                        carton.setPackingListId(cursor.getString(3));
+                        carton.setPlNo(cursor.getString(4));
+                        carton.setCartonNo(cursor.getString(5));
+                        carton.setGlNo(cursor.getString(6));
+                        carton.setBuyer(cursor.getString(7));
+                        carton.setSeason(cursor.getString(8));
+                        carton.setContent(cursor.getString(9));
+                        carton.setPcs(cursor.getString(10));
+                        carton.setPacked(cursor.getString(11));
+                        cartonArrayList.add(carton);
+                    } while (cursor.moveToNext());
+                }
+                cursor.close();
+                db.close();
+                return cartonArrayList;
+            }
+
+            public void clearCartonTable() {
+                SQLiteDatabase db = this.getWritableDatabase();
+                db.delete("carton", null, null);
+                db.close();
+            }
+        }
 }

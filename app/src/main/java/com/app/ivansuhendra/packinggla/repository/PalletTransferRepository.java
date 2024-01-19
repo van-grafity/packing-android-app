@@ -72,9 +72,9 @@ public class PalletTransferRepository {
         return mutableLiveData;
     }
 
-    public LiveData<APIResponse> getPalletTransferResponse(int id) {
+    public LiveData<APIResponse> getPalletTransferNoteResponse(int id) {
         final MutableLiveData<APIResponse> mutableLiveData = new MutableLiveData<>();
-        API.service().getPalletTransfer(id).enqueue(new Callback<APIResponse>() {
+        API.service().getPalletTransferNote(id).enqueue(new Callback<APIResponse>() {
             @Override
             public void onResponse(Call<APIResponse> call, Response<APIResponse> response) {
                 mutableLiveData.setValue(response.body());
@@ -82,6 +82,23 @@ public class PalletTransferRepository {
 
             @Override
             public void onFailure(Call<APIResponse> call, Throwable t) {
+
+            }
+        });
+        return mutableLiveData;
+    }
+
+    public LiveData<APIResponse> updateTransferNoteResponse(int palletTransferId, int transferNoteId, Integer[] barcodeIds) {
+        final MutableLiveData<APIResponse> mutableLiveData = new MutableLiveData<>();
+        API.service().updateTransferNote(palletTransferId, transferNoteId, barcodeIds).enqueue(new APICallback<APIResponse>(mContext) {
+            @Override
+            protected void onSuccess(APIResponse apiResponse) {
+                mutableLiveData.setValue(apiResponse);
+
+            }
+
+            @Override
+            protected void onError(BadRequest error) {
 
             }
         });
