@@ -14,6 +14,12 @@ public class APIModels {
     @SerializedName("transfer_note")
     private TransferNote transferNote;
 
+    @SerializedName("carton")
+    private Carton carton;
+
+    @SerializedName("pallet_receive_list")
+    private ArrayList<PalletTransfer> palletReceive;
+
     public ArrayList<PalletTransfer> getPalletTransfers() {
         return palletTransfers;
     }
@@ -24,5 +30,13 @@ public class APIModels {
 
     public TransferNote getTransferNote() {
         return transferNote;
+    }
+
+    public Carton getCarton() {
+        return carton;
+    }
+
+    public ArrayList<PalletTransfer> getPalletReceive() {
+        return palletReceive;
     }
 }

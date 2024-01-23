@@ -46,4 +46,34 @@ public class TransferViewModel extends ViewModel {
         palletTransferResponseData = palletTransferRepository.updateTransferNoteResponse(palletTransferId, transferNoteId, barcodeIds);
         return palletTransferResponseData;
     }
+
+    public LiveData<APIResponse> createPalletReceiveLiveData(int palletTransferId, int rack, String receivedBy, String palletBarcode) {
+        palletTransferResponseData = palletTransferRepository.createPalletReceiveResponse(palletTransferId, rack, receivedBy, palletBarcode);
+        return palletTransferResponseData;
+    }
+
+    public LiveData<APIResponse> searchPalletReceiveLiveData(String palletBarcode) {
+        palletTransferResponseData = palletTransferRepository.searchPalletReceiveResponse(palletBarcode);
+        return palletTransferResponseData;
+    }
+
+    public LiveData<APIResponse> newTransferNoteLiveData(int palletTransferId, Integer[] barcodeIds) {
+        palletTransferResponseData = palletTransferRepository.newTransferNoteResponse(palletTransferId, barcodeIds);
+        return palletTransferResponseData;
+    }
+
+    public LiveData<APIResponse> searchCartonLiveData(String barcode) {
+        palletTransferResponseData = palletTransferRepository.searchCartonResponse(barcode);
+        return palletTransferResponseData;
+    }
+
+    public LiveData<APIResponse> getPalletReceiveLiveData(int limit, int page) {
+        palletTransferResponseData = palletTransferRepository.getPalletReceiveResponse(limit, page);
+        return palletTransferResponseData;
+    }
+
+    public LiveData<APIResponse> getPalletTransferLiveData(int limit, int page) {
+        palletTransferResponseData = palletTransferRepository.getPalletTransfersResponse(limit, page);
+        return palletTransferResponseData;
+    }
 }

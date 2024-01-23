@@ -29,7 +29,9 @@ import com.app.ivansuhendra.packinggla.NewPalletTransferActivity;
 import com.app.ivansuhendra.packinggla.PalletTransferDetailActivity;
 import com.app.ivansuhendra.packinggla.ScanQrActivity;
 import com.app.ivansuhendra.packinggla.adapter.PalletTransferAdapter;
+import com.app.ivansuhendra.packinggla.adapter.PalletTransferfAdapter;
 import com.app.ivansuhendra.packinggla.databinding.FragmentTransferBinding;
+import com.app.ivansuhendra.packinggla.model.APIResponse;
 import com.app.ivansuhendra.packinggla.model.PalletTransfer;
 import com.app.ivansuhendra.packinggla.utils.GlobalVars;
 import com.app.ivansuhendra.packinggla.viewmodel.PalletTransferViewModel;
@@ -45,7 +47,7 @@ public class TransferFragment extends Fragment {
     private TransferViewModel transferViewModel;
     private FragmentTransferBinding binding;
     private PalletTransferViewModel palletTransferViewModel;
-    private PalletTransferAdapter palletTransferAdapter;
+    private PalletTransferfAdapter palletTransferAdapter;
     private ProgressDialog progressDialog;
 
     private Snackbar snackbar;
@@ -132,15 +134,6 @@ public class TransferFragment extends Fragment {
 
     private void setupRecyclerView() {
         binding.rvPalletTransfer.setLayoutManager(new GridLayoutManager(getActivity(), 2, LinearLayoutManager.VERTICAL, false));
-        palletTransferAdapter = new PalletTransferAdapter(getActivity(), new PalletTransferAdapter.itemAdapterOnClickHandler() {
-            @Override
-            public void onClick(PalletTransfer plTransfer, View view, int position) {
-                Intent intent = new Intent(getActivity(), PalletTransferDetailActivity.class);
-                intent.putExtra(GlobalVars.PALLET_TRANSFER_LIST, plTransfer);
-                startActivity(intent);
-            }
-        });
-        binding.rvPalletTransfer.setAdapter(palletTransferAdapter);
     }
 
     private void filterData(String query) {
@@ -152,18 +145,22 @@ public class TransferFragment extends Fragment {
     private void loadDataTransferList() {
 //        snackbar.dismiss(); // Tutup Snackbar setelah berhasil reload
 
-        palletTransferViewModel = new ViewModelProvider(this).get(PalletTransferViewModel.class);
-        palletTransferViewModel.getPagedListLiveData().observe(getViewLifecycleOwner(), new Observer<PagedList<PalletTransfer>>() {
+        transferViewModel = new ViewModelProvider(this).get(TransferViewModel.class);
+        transferViewModel.getPalletTransferLiveData(100, 1).observe(getViewLifecycleOwner(), new Observer<APIResponse>() {
             @Override
-            public void onChanged(PagedList<PalletTransfer> palletTransfers) {
-                getActivity().runOnUiThread(new Runnable() {
-                    public void run() {
-                        if (progressDialog != null && progressDialog.isShowing()) {
-                            progressDialog.cancel();
-                        }
+            public void onChanged(APIResponse apiResponse) {
+                palletTransferAdapter = new PalletTransferfAdapter(getActivity(), apiResponse.getData().getPalletTransfers(), new PalletTransferfAdapter.itemAdapterOnClickHandler() {
+                    @Override
+                    public void onClick(PalletTransfer palletTransfer, View view, int position) {
+                        Intent intent = new Intent(getActivity(), PalletTransferDetailActivity.class);
+                        intent.putExtra(GlobalVars.PALLET_TRANSFER_LIST, palletTransfer);
+                        startActivity(intent);
                     }
                 });
-                palletTransferAdapter.submitList(palletTransfers);
+                binding.rvPalletTransfer.setAdapter(palletTransferAdapter);
+                if (progressDialog != null && progressDialog.isShowing()) {
+                    progressDialog.cancel();
+                }
             }
         });
     }

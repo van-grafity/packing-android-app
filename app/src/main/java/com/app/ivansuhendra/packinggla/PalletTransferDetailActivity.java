@@ -2,20 +2,18 @@ package com.app.ivansuhendra.packinggla;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.app.ivansuhendra.packinggla.adapter.TransferNoteAdapter;
 import com.app.ivansuhendra.packinggla.databinding.ActivityPalletTransferDetailBinding;
-import com.app.ivansuhendra.packinggla.model.APIResponse;
 import com.app.ivansuhendra.packinggla.model.PalletTransfer;
 import com.app.ivansuhendra.packinggla.model.TransferNote;
 import com.app.ivansuhendra.packinggla.ui.ViewState;
@@ -33,9 +31,9 @@ public class PalletTransferDetailActivity extends AppCompatActivity {
     private TransferViewModel transferViewModel;
     private TransferNoteAdapter mAdapter;
     private ProgressDialog progressDialog;
+
     private enum IntentType {
         EDIT_TRANSFER_NOTE,
-        NEW_TRANSFER_NOTE
     }
 
     @Override
@@ -55,7 +53,15 @@ public class PalletTransferDetailActivity extends AppCompatActivity {
 
     private void initializeClickListeners() {
         binding.btnItemTransferNote.setOnClickListener(view -> startTransferNoteActivity(IntentType.EDIT_TRANSFER_NOTE));
-        binding.btnNewTransferNote.setOnClickListener(view -> startTransferNoteActivity(IntentType.NEW_TRANSFER_NOTE));
+        binding.btnNewTransferNote.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(PalletTransferDetailActivity.this, EditTransferNoteActivity.class);
+                intent.putExtra(GlobalVars.PALLET_TRANSFER_LIST, mPallet);
+                intent.putExtra(GlobalVars.TRANSFER_NOTE_LIST, 0);
+                startActivity(intent);
+            }
+        });
     }
 
     private void startTransferNoteActivity(IntentType intentType) {
@@ -63,9 +69,6 @@ public class PalletTransferDetailActivity extends AppCompatActivity {
         switch (intentType) {
             case EDIT_TRANSFER_NOTE:
                 activityClass = EditTransferNoteActivity.class;
-                break;
-            case NEW_TRANSFER_NOTE:
-                activityClass = NewTransferNoteActivity.class;
                 break;
             default:
                 throw new IllegalArgumentException("Unsupported intent type: " + intentType);
@@ -77,7 +80,7 @@ public class PalletTransferDetailActivity extends AppCompatActivity {
         transferViewModel = new ViewModelProvider(this).get(TransferViewModel.class);
         mPallet = getIntent().getParcelableExtra(GlobalVars.PALLET_TRANSFER_LIST);
 
-        binding.bgStatus.setBackground(getDrawable(GlobalVars.provideStatus(mPallet.getStatus())));
+        binding.bgStatus.setBackgroundColor(Color.parseColor("#" + mPallet.getColorCode()));
         binding.tvStatusProgressLayer.setText(mPallet.getStatus());
         binding.tvTransactionNumber.setText(mPallet.getTransactionNumber());
         binding.tvPalletNo.setText(mPallet.getPalletSerialNumber());

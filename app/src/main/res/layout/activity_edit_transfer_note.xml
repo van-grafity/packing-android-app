@@ -41,7 +41,7 @@
                         android:textColor="@android:color/white" />
 
                     <TextView
-                        android:id="@+id/tvDept"
+                        android:id="@+id/tv_title"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Edit Transfer Note"

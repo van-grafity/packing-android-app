@@ -17,6 +17,16 @@ public interface APIService {
     @GET("pallet-transfer")
     Call<APIResponse> getPalletTransfer(@Query("limit") int limit, @Query("page") int page);
 
+    @GET("pallet-receive")
+    Call<APIResponse> getPalletReceive(@Query("limit") int limit, @Query("page") int page);
+
+    @FormUrlEncoded
+    @POST("pallet-receive")
+    Call<APIResponse> createPalletReceive(@Field("pallet_transfer_id") int palletTransferId, @Field("rack") int rack, @Field("received_by") String receivedBy, @Field("pallet_barcode") String palletBarcode);
+
+    @GET("pallet-receive/" + "search-pallet")
+    Call<APIResponse> searchPalletReceive(@Query("pallet_barcode") String palletBarcode);
+
     @FormUrlEncoded
     @POST("pallet-transfer")
     Call<APIResponse> savePalletTransferResponse(@Field("pallet_serial_number") String palletSerialNumber,@Field("location_from") int locationFrom,@Field("location_to") int locationTo);
@@ -30,4 +40,11 @@ public interface APIService {
     @FormUrlEncoded
     @PUT("pallet-transfer/" + "transfer-note-update")
     Call<APIResponse> updateTransferNote(@Field("pallet_transfer_id") int palletTransferId, @Field("transfer_note_id") int transferNoteId, @Field("carton_barcode_id[]") Integer[] barcodeIds);
+
+    @FormUrlEncoded
+    @POST("pallet-transfer/" + "transfer-note-store")
+    Call<APIResponse> newTransferNote(@Field("pallet_transfer_id") int palletTransferId, @Field("carton_barcode_id[]") Integer[] barcodeIds);
+
+    @GET("pallet-transfer/" + "search-carton")
+    Call<APIResponse> searchCarton(@Query("carton_barcode") String barcode);
 }

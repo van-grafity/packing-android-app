@@ -104,4 +104,87 @@ public class PalletTransferRepository {
         });
         return mutableLiveData;
     }
+
+    public LiveData<APIResponse>createPalletReceiveResponse(int palletTransferId, int rack, String receivedBy, String palletBarcode) {
+        final MutableLiveData<APIResponse> mutableLiveData = new MutableLiveData<>();
+        API.service().createPalletReceive(palletTransferId, rack, receivedBy, palletBarcode).enqueue(new APICallback<APIResponse>(mContext) {
+            @Override
+            protected void onSuccess(APIResponse apiResponse) {
+                mutableLiveData.setValue(apiResponse);
+
+            }
+
+            @Override
+            protected void onError(BadRequest error) {
+
+            }
+        });
+        return mutableLiveData;
+    }
+
+    public LiveData<APIResponse>searchPalletReceiveResponse(String palletBarcode) {
+        final MutableLiveData<APIResponse> mutableLiveData = new MutableLiveData<>();
+        API.service().searchPalletReceive(palletBarcode).enqueue(new APICallback<APIResponse>(mContext) {
+            @Override
+            protected void onSuccess(APIResponse apiResponse) {
+                mutableLiveData.setValue(apiResponse);
+
+            }
+
+            @Override
+            protected void onError(BadRequest error) {
+
+            }
+        });
+        return mutableLiveData;
+    }
+
+    public LiveData<APIResponse> newTransferNoteResponse(int palletTransferId, Integer[] barcodeIds) {
+        final MutableLiveData<APIResponse> mutableLiveData = new MutableLiveData<>();
+        API.service().newTransferNote(palletTransferId, barcodeIds).enqueue(new APICallback<APIResponse>(mContext) {
+            @Override
+            protected void onSuccess(APIResponse apiResponse) {
+                mutableLiveData.setValue(apiResponse);
+
+            }
+
+            @Override
+            protected void onError(BadRequest error) {
+
+            }
+        });
+        return mutableLiveData;
+    }
+
+    public LiveData<APIResponse> searchCartonResponse(String barcode) {
+        final MutableLiveData<APIResponse> mutableLiveData = new MutableLiveData<>();
+        API.service().searchCarton(barcode).enqueue(new Callback<APIResponse>() {
+            @Override
+            public void onResponse(Call<APIResponse> call, Response<APIResponse> response) {
+                mutableLiveData.setValue(response.body());
+            }
+
+            @Override
+            public void onFailure(Call<APIResponse> call, Throwable t) {
+
+            }
+        });
+        return mutableLiveData;
+    }
+
+    public LiveData<APIResponse> getPalletReceiveResponse(int limit, int page) {
+        final MutableLiveData<APIResponse> mutableLiveData = new MutableLiveData<>();
+        API.service().getPalletReceive(limit, page).enqueue(new Callback<APIResponse>() {
+            @Override
+            public void onResponse(Call<APIResponse> call, Response<APIResponse> response) {
+                mutableLiveData.setValue(response.body());
+            }
+
+            @Override
+            public void onFailure(Call<APIResponse> call, Throwable t) {
+
+            }
+        });
+        return mutableLiveData;
+    }
 }

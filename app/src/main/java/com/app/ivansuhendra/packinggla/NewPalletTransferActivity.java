@@ -130,7 +130,8 @@ public class NewPalletTransferActivity extends AppCompatActivity {
                                     });
 
                             AlertDialog alertDialog = alertDialogBuilder.create();
-                            alertDialog.show();                        } else {
+                            alertDialog.show();
+                        } else {
                             Toast.makeText(NewPalletTransferActivity.this, apiResponse.getMessage(), Toast.LENGTH_SHORT).show();
                             finish();
                         }

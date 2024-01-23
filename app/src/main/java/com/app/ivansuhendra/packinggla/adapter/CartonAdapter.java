@@ -33,6 +33,10 @@ public class CartonAdapter extends RecyclerView.Adapter<CartonAdapter.CartonView
         notifyDataSetChanged(); // Notify the adapter that the data set has changed
     }
 
+    public void addItem(Carton carton) {
+        mItems.add(carton);
+    }
+
     public interface onItemClickListener {
         void onClick(View view, int position, Carton carton);
     }

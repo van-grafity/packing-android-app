@@ -1,6 +1,7 @@
 package com.app.ivansuhendra.packinggla.adapter;
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,7 +43,7 @@ public class PalletTransferfAdapter extends RecyclerView.Adapter<PalletTransferf
     public void onBindViewHolder(@NonNull PalletTransferViewHolder holder, int position) {
         PalletTransfer palletTransfer = mPalletTransfers.get(position);
 
-        holder.bgStatus.setBackground(mContext.getDrawable(GlobalVars.provideStatus(palletTransfer.getStatus())));
+        holder.bgStatus.setBackgroundColor(Color.parseColor("#"+palletTransfer.getColorCode()));
 
         holder.tvStatusProgressLayer.setText(palletTransfer.getStatus());
         holder.tvTransactionNo.setText(palletTransfer.getTransactionNumber());

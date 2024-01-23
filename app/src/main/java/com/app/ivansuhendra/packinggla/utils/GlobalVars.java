@@ -20,7 +20,7 @@ public class GlobalVars {
             return R.drawable.rounded_bg_ready;
         } else if (status.equals("Loaded")) {
             return R.drawable.rounded_bg_loaded;
-        } else if (status.equals("At Warehouse")) {
+        } else if (status.equals("Received at Warehouse")) {
             return R.drawable.round_bg_at_warehouse;
         } else if (status.equals("At Preparation in Progress")) {
             return R.drawable.round_bg_progress;

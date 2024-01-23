@@ -8,32 +8,6 @@
     tools:context=".ui.receive.ReceiveFragment">
 
     <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true"
-        android:orientation="horizontal"
-        android:padding="14dp">
-
-        <com.google.android.material.button.MaterialButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:backgroundTint="#E0E4ED"
-            android:text="Back"
-            android:textColor="@color/black" />
-
-        <androidx.legacy.widget.Space
-            android:layout_width="8dp"
-            android:layout_height="wrap_content" />
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btn_new_pallet_receive"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="New Pallet Receive" />
-    </LinearLayout>
-
-    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
@@ -95,17 +69,20 @@
             </LinearLayout>
         </LinearLayout>
 
+        <androidx.legacy.widget.Space
+            android:layout_width="match_parent"
+            android:layout_height="14dp" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="14dp"
+            android:paddingHorizontal="14dp"
             android:orientation="vertical">
 
             <LinearLayout
                 android:id="@+id/search_new"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="14dp"
                 android:background="@drawable/custom_rounded_button_gray"
                 android:paddingStart="8dp"
                 android:paddingEnd="8dp"
@@ -133,7 +110,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="14dp" />
 
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_pallet_receive"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="visible" />
+
             <LinearLayout
+                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical">
@@ -660,5 +644,31 @@
             </LinearLayout>
         </LinearLayout>
 
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal"
+        android:padding="14dp">
+
+        <com.google.android.material.button.MaterialButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="#E0E4ED"
+            android:text="Back"
+            android:textColor="@color/black" />
+
+        <androidx.legacy.widget.Space
+            android:layout_width="8dp"
+            android:layout_height="wrap_content" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_new_pallet_receive"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="New Pallet Receive" />
     </LinearLayout>
 </RelativeLayout>

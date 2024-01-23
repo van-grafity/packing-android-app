@@ -55,8 +55,14 @@ public class ScanQrActivity extends AppCompatActivity {
                         String partStr = message.substring(0, 4);
 
 //                        Toast.makeText(ScanQrActivity.this, serialCode, Toast.LENGTH_SHORT).show();
-                        if (partStr.equals("PLT-") && serialCode.equals("PLT_CODE")){
+                        if (serialCode.equals("PLT_CODE")){
                             Intent intent = new Intent(ScanQrActivity.this, NewPalletTransferActivity.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                            intent.putExtra("sn", message);
+                            startActivity(intent);
+                            finish();
+                        } else if (serialCode.equals("RECEIVE_CODE")){
+                            Intent intent = new Intent(ScanQrActivity.this, PalletReceiveDetailActivity.class);
                             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_SINGLE_TOP);
                             intent.putExtra("sn", message);
                             startActivity(intent);
