@@ -1,11 +1,9 @@
 package com.app.ivansuhendra.packinggla;
 
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
-import android.os.CountDownTimer;
 import android.os.Handler;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
@@ -21,10 +19,10 @@ import com.app.ivansuhendra.packinggla.databinding.ActivityNewPalletTransferBind
 import com.app.ivansuhendra.packinggla.model.APIResponse;
 import com.app.ivansuhendra.packinggla.model.Location;
 import com.app.ivansuhendra.packinggla.utils.GlobalVars;
-import com.app.ivansuhendra.packinggla.viewmodel.PalletTransferViewModel;
 import com.app.ivansuhendra.packinggla.viewmodel.TransferViewModel;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class NewPalletTransferActivity extends AppCompatActivity {
     private static final String TAG = "NewPalletTransfer";
@@ -32,6 +30,7 @@ public class NewPalletTransferActivity extends AppCompatActivity {
     private TransferViewModel transferViewModel;
     private int locationFromId;
     private int locationToId;
+    private ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,7 +41,7 @@ public class NewPalletTransferActivity extends AppCompatActivity {
         String mSn;
         if (savedInstanceState == null) {
             Bundle extras = getIntent().getExtras();
-            if(extras == null) {
+            if (extras == null) {
                 mSn = "";
             } else {
                 mSn = extras.getString("sn");
@@ -55,14 +54,24 @@ public class NewPalletTransferActivity extends AppCompatActivity {
 
         transferViewModel = new ViewModelProvider(this).get(TransferViewModel.class);
 
-        initData();
+        progressDialog = GlobalVars.pgDialog(NewPalletTransferActivity.this);
+        progressDialog.show();
+        transferViewModel.getLocationLiveData().observe(this, new Observer<APIResponse>() {
+            @Override
+            public void onChanged(APIResponse apiResponse) {
+                updateSpinnerData(apiResponse.getData().getLocations());
+                if (progressDialog != null && progressDialog.isShowing()) {
+                    progressDialog.cancel();
+                }
+            }
+        });
+//        initData();
 
         binding.spLocationFrom.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 Location selectedItem = (Location) parent.getItemAtPosition(position);
                 locationFromId = selectedItem.getId();
-                String selectedName = selectedItem.getName();
 
             }
 
@@ -76,7 +85,6 @@ public class NewPalletTransferActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 Location selectedItem = (Location) parent.getItemAtPosition(position);
                 locationToId = selectedItem.getId();
-                String selectedName = selectedItem.getName();
 
             }
 
@@ -93,6 +101,16 @@ public class NewPalletTransferActivity extends AppCompatActivity {
                 showLoadingAndDelayApiCall(palletSerialNumber);
             }
         });
+    }
+
+    private void updateSpinnerData(List<Location> locations) {
+        ArrayAdapter<Location> fromAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, locations);
+        fromAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        binding.spLocationFrom.setAdapter(fromAdapter);
+
+        ArrayAdapter<Location> toAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, locations);
+        toAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        binding.spLocationTo.setAdapter(toAdapter);
     }
 
     private void showLoadingAndDelayApiCall(String palletSerialNumber) {

@@ -2,9 +2,15 @@ package com.app.ivansuhendra.packinggla.model;
 
 import androidx.annotation.NonNull;
 
+import com.google.gson.annotations.SerializedName;
+
 public class Rack {
     private int id;
+    @SerializedName("serial_number")
     private String name;
+    private String description;
+    private String area;
+    private String level;
 
     public Rack(int id, String name) {
         this.id = id;

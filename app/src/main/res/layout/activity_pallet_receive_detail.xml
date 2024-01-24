@@ -211,6 +211,7 @@
             android:paddingHorizontal="12dp">
 
             <TextView
+                android:id="@+id/btn_show"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Transfer Note List : "
@@ -229,14 +230,14 @@
 
             <androidx.legacy.widget.Space
                 android:layout_width="match_parent"
-                android:layout_height="4dp"
+                android:layout_height="14dp"
                 android:visibility="visible" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Rack :"
-                android:textAppearance="@style/TextAppearance.Bold14" />
+                android:textAppearance="@style/TextAppearance.Bold16" />
 
             <androidx.legacy.widget.Space
                 android:layout_width="match_parent"
@@ -248,8 +249,17 @@
                 android:layout_width="match_parent"
                 android:layout_height="46dp"
                 android:background="@null"
-                android:hint="Remark"
-                android:visibility="visible" />
+                android:hint="Rack"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/et_rack"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawableRight="@drawable/arrow_circle"
+                android:hint="Search Rack"
+                android:textAppearance="@style/TextAppearance.Medium20"
+                android:textStyle="bold" />
 
 
             <LinearLayout

@@ -13,6 +13,14 @@
         <action
             android:id="@+id/action_nav_home_to_transferFragment"
             app:destination="@id/nav_transfer"/>
+
+        <action
+            android:id="@+id/action_nav_home_to_receiveFragment"
+            app:destination="@id/nav_receive"/>
+
+        <action
+            android:id="@+id/action_nav_home_to_loadFragment"
+            app:destination="@id/nav_load"/>
     </fragment>
 
     <fragment

@@ -3,12 +3,16 @@ package com.app.ivansuhendra.packinggla;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.Manifest;
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.MultiplePermissionsReport;
@@ -21,11 +25,35 @@ import java.util.List;
 import io.github.inflationx.viewpump.ViewPumpContextWrapper;
 
 public class SplashActivity extends AppCompatActivity {
+    private ImageView ivLogo;
+    private TextView tvName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
+
+        ivLogo = findViewById(R.id.iv_logo);
+        tvName = findViewById(R.id.tv_name);
+
+        // Set initial properties for ivLogo and tvName
+        ivLogo.setAlpha(0f);
+        tvName.setAlpha(0f);
+
+        // Create ObjectAnimator for ivLogo
+        ObjectAnimator logoAnimator = ObjectAnimator.ofFloat(ivLogo, "alpha", 0f, 1f);
+        logoAnimator.setDuration(1000); // Set the duration in milliseconds
+
+        // Create ObjectAnimator for tvName
+        ObjectAnimator nameAnimator = ObjectAnimator.ofFloat(tvName, "alpha", 0f, 1f);
+        nameAnimator.setDuration(1000); // Set the duration in milliseconds
+
+        // Create an AnimatorSet to play animations sequentially
+        AnimatorSet animatorSet = new AnimatorSet();
+        animatorSet.playSequentially(logoAnimator, nameAnimator);
+
+        // Start the animation when the activity is created
+        animatorSet.start();
 
         new Thread() {
             @Override
@@ -71,7 +99,7 @@ public class SplashActivity extends AppCompatActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                Intent intent = new Intent(SplashActivity.this, MainActivity.class);
+                Intent intent = new Intent(SplashActivity.this, LoginActivity.class);
                 startActivity(intent);
                 finish();
             }

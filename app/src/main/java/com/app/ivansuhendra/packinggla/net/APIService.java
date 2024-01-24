@@ -31,6 +31,10 @@ public interface APIService {
     @POST("pallet-transfer")
     Call<APIResponse> savePalletTransferResponse(@Field("pallet_serial_number") String palletSerialNumber,@Field("location_from") int locationFrom,@Field("location_to") int locationTo);
 
+    @FormUrlEncoded
+    @POST("login")
+    Call<APIResponse> loginResponse(@Field("email") String email,@Field("password") String password);
+
     @GET("pallet-transfer/" + "{id}")
     Call<APIResponse> getPalletTransferDetail(@Path("id") int id);
 
@@ -47,4 +51,17 @@ public interface APIService {
 
     @GET("pallet-transfer/" + "search-carton")
     Call<APIResponse> searchCarton(@Query("carton_barcode") String barcode);
+
+    @GET("location")
+    Call<APIResponse> getLocation();
+
+    @GET("rack")
+    Call<APIResponse> getRack(@Query("limit") int limit, @Query("page") int page, @Query("serial_number") String serialNo);
+
+    @GET("pallet-loading/" + "search-pallet")
+    Call<APIResponse> searchPalletLoad(@Query("pallet_barcode") String palletBarcode);
+
+    @FormUrlEncoded
+    @POST("pallet-loading")
+    Call<APIResponse> postPalletLoad(@Field("transfer_note_id[]") Integer[] transferNoteIds);
 }

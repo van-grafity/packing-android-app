@@ -88,6 +88,54 @@ public class PalletTransferRepository {
         return mutableLiveData;
     }
 
+    public LiveData<APIResponse> loginResponse(String email, String password) {
+        final MutableLiveData<APIResponse> mutableLiveData = new MutableLiveData<>();
+        API.service().loginResponse(email, password).enqueue(new Callback<APIResponse>() {
+            @Override
+            public void onResponse(Call<APIResponse> call, Response<APIResponse> response) {
+                mutableLiveData.setValue(response.body());
+            }
+
+            @Override
+            public void onFailure(Call<APIResponse> call, Throwable t) {
+
+            }
+        });
+        return mutableLiveData;
+    }
+
+    public LiveData<APIResponse> getLocationResponse() {
+        final MutableLiveData<APIResponse> mutableLiveData = new MutableLiveData<>();
+        API.service().getLocation().enqueue(new Callback<APIResponse>() {
+            @Override
+            public void onResponse(Call<APIResponse> call, Response<APIResponse> response) {
+                mutableLiveData.setValue(response.body());
+            }
+
+            @Override
+            public void onFailure(Call<APIResponse> call, Throwable t) {
+
+            }
+        });
+        return mutableLiveData;
+    }
+
+    public LiveData<APIResponse> getRackResponse(int limit, int page, String serialNo) {
+        final MutableLiveData<APIResponse> mutableLiveData = new MutableLiveData<>();
+        API.service().getRack(limit, page, serialNo).enqueue(new Callback<APIResponse>() {
+            @Override
+            public void onResponse(Call<APIResponse> call, Response<APIResponse> response) {
+                mutableLiveData.setValue(response.body());
+            }
+
+            @Override
+            public void onFailure(Call<APIResponse> call, Throwable t) {
+
+            }
+        });
+        return mutableLiveData;
+    }
+
     public LiveData<APIResponse> updateTransferNoteResponse(int palletTransferId, int transferNoteId, Integer[] barcodeIds) {
         final MutableLiveData<APIResponse> mutableLiveData = new MutableLiveData<>();
         API.service().updateTransferNote(palletTransferId, transferNoteId, barcodeIds).enqueue(new APICallback<APIResponse>(mContext) {

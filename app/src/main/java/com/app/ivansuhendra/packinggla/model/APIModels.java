@@ -20,6 +20,12 @@ public class APIModels {
     @SerializedName("pallet_receive_list")
     private ArrayList<PalletTransfer> palletReceive;
 
+    @SerializedName("locations")
+    private ArrayList<Location> locations;
+
+    @SerializedName("racks")
+    private ArrayList<Rack> rack;
+
     public ArrayList<PalletTransfer> getPalletTransfers() {
         return palletTransfers;
     }
@@ -38,5 +44,13 @@ public class APIModels {
 
     public ArrayList<PalletTransfer> getPalletReceive() {
         return palletReceive;
+    }
+
+    public ArrayList<Location> getLocations() {
+        return locations;
+    }
+
+    public ArrayList<Rack> getRack() {
+        return rack;
     }
 }

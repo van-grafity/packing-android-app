@@ -38,8 +38,21 @@ public class HomeFragment extends Fragment {
         binding.btnTransfer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                NavController navController = Navigation.findNavController(view);
-                navController.navigate(R.id.action_nav_home_to_transferFragment);
+                navigateToTransferFragment();
+            }
+        });
+
+        binding.btnReceive.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                navigateToReceiveFragment();
+            }
+        });
+
+        binding.btnLoad.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                navigateToLoadFragment();
             }
         });
 
@@ -53,10 +66,19 @@ public class HomeFragment extends Fragment {
     }
 
     private void navigateToTransferFragment() {
-        // Mendapatkan NavController dari host activity
         NavController navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment_content_main);
-
-        // Melakukan navigasi ke destinasi TransferFragment
         navController.navigate(R.id.action_nav_home_to_transferFragment);
+    }
+
+    private void navigateToReceiveFragment() {
+        NavController navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment_content_main);
+        // Use the appropriate action or destination ID to navigate to the ReceiveFragment
+        navController.navigate(R.id.action_nav_home_to_receiveFragment);
+    }
+
+    private void navigateToLoadFragment() {
+        NavController navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment_content_main);
+        // Use the appropriate action or destination ID to navigate to the LoadFragment
+        navController.navigate(R.id.action_nav_home_to_loadFragment);
     }
 }

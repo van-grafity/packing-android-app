@@ -42,6 +42,11 @@ public class TransferViewModel extends ViewModel {
         return palletTransferResponseData;
     }
 
+    public LiveData<APIResponse> loginLiveData(String email, String password) {
+        palletTransferResponseData = palletTransferRepository.loginResponse(email, password);
+        return palletTransferResponseData;
+    }
+
     public LiveData<APIResponse> updateTransferNoteLiveData(int palletTransferId, int transferNoteId, Integer[] barcodeIds) {
         palletTransferResponseData = palletTransferRepository.updateTransferNoteResponse(palletTransferId, transferNoteId, barcodeIds);
         return palletTransferResponseData;
@@ -74,6 +79,16 @@ public class TransferViewModel extends ViewModel {
 
     public LiveData<APIResponse> getPalletTransferLiveData(int limit, int page) {
         palletTransferResponseData = palletTransferRepository.getPalletTransfersResponse(limit, page);
+        return palletTransferResponseData;
+    }
+
+    public LiveData<APIResponse> getLocationLiveData() {
+        palletTransferResponseData = palletTransferRepository.getLocationResponse();
+        return palletTransferResponseData;
+    }
+
+    public LiveData<APIResponse> getRackLiveData(int limit, int page, String serialNo) {
+        palletTransferResponseData = palletTransferRepository.getRackResponse(limit, page, serialNo);
         return palletTransferResponseData;
     }
 }

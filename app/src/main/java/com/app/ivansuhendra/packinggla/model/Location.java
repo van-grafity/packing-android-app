@@ -1,7 +1,10 @@
 package com.app.ivansuhendra.packinggla.model;
 
+import com.google.gson.annotations.SerializedName;
+
 public class Location {
     private int id;
+    @SerializedName("location_name")
     private String name;
 
     public Location(int id, String name) {
