@@ -1,6 +1,12 @@
 package com.app.ivansuhendra.packinggla.net;
 
+import static android.content.Context.MODE_PRIVATE;
+
+import android.content.Context;
+
+import com.app.ivansuhendra.packinggla.model.User;
 import com.app.ivansuhendra.packinggla.utils.DateDeserializer;
+import com.app.ivansuhendra.packinggla.utils.GlobalVars;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -9,6 +15,7 @@ import java.lang.annotation.Annotation;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
+import br.com.kots.mob.complex.preferences.ComplexPreferences;
 import okhttp3.Credentials;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
@@ -82,5 +89,16 @@ public class API {
 
     public static void setSessionError(boolean sessionError) {
         API.sessionError = sessionError;
+    }
+
+    public static void saveCredentials(Context context, User user) {
+        ComplexPreferences complexPreferences = ComplexPreferences.getComplexPreferences(context, GlobalVars.PREF_USER, MODE_PRIVATE);
+        complexPreferences.putObject(GlobalVars.PREF_USER_KEY, user);
+        complexPreferences.commit();
+    }
+
+    public static User currentUser(Context context) {
+        ComplexPreferences complexPreferences = ComplexPreferences.getComplexPreferences(context, GlobalVars.PREF_USER, MODE_PRIVATE);
+        return complexPreferences.getObject(GlobalVars.PREF_USER_KEY, User.class);
     }
 }

@@ -18,9 +18,13 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.app.ivansuhendra.packinggla.databinding.ActivityMainBinding;
 import com.app.ivansuhendra.packinggla.model.APIResponse;
+import com.app.ivansuhendra.packinggla.model.User;
+import com.app.ivansuhendra.packinggla.utils.GlobalVars;
 import com.app.ivansuhendra.packinggla.viewmodel.PalletTransferViewModel;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
+
+import br.com.kots.mob.complex.preferences.ComplexPreferences;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
@@ -28,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
     private AppBarConfiguration mAppBarConfiguration;
     private ActivityMainBinding binding;
     private NavController navController; // Global NavController variable
+    private User mUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +42,14 @@ public class MainActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         setSupportActionBar(binding.appBarMain.toolbar);
+
+        ComplexPreferences complexPreferences = ComplexPreferences.getComplexPreferences(this, GlobalVars.PREF_USER, MODE_PRIVATE);
+        mUser = complexPreferences.getObject(GlobalVars.PREF_USER_KEY, User.class);
+        if (mUser == null) {
+            startActivity(new Intent(getBaseContext(), LoginActivity.class));
+            finish();
+            return;
+        }
 
         binding.appBarMain.fab.setOnClickListener(new View.OnClickListener() {
             @Override

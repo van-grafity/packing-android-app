@@ -26,6 +26,9 @@ public class APIModels {
     @SerializedName("racks")
     private ArrayList<Rack> rack;
 
+    @SerializedName("user")
+    private User user;
+
     public ArrayList<PalletTransfer> getPalletTransfers() {
         return palletTransfers;
     }
@@ -52,5 +55,9 @@ public class APIModels {
 
     public ArrayList<Rack> getRack() {
         return rack;
+    }
+
+    public User getUser() {
+        return user;
     }
 }

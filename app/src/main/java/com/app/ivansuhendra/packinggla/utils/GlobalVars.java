@@ -14,6 +14,10 @@ public class GlobalVars {
     public static final String PALLET_TRANSFER_LIST = "pallet transfer list";
     public static final String TRANSFER_NOTE_LIST = "transfer note list";
     public static final String PLT_CODE = "pallet_code";
+    public static final String PREF_USER = "pref:user";
+    public static final String PREF_USER_KEY = "user";
+    public static final String PREF_CREDENTIAL = "pref:credential";
+    public static final String PREF_CREDENTIAL_KEY = "credential";
 
     public static int provideStatus(String status) {
         if (status.equals("Ready to Transfer")) {

@@ -14,6 +14,8 @@ import android.widget.Toast;
 
 import com.app.ivansuhendra.packinggla.databinding.ActivityLoginBinding;
 import com.app.ivansuhendra.packinggla.model.APIResponse;
+import com.app.ivansuhendra.packinggla.model.User;
+import com.app.ivansuhendra.packinggla.net.API;
 import com.app.ivansuhendra.packinggla.utils.GlobalVars;
 import com.app.ivansuhendra.packinggla.viewmodel.TransferViewModel;
 
@@ -50,6 +52,12 @@ public class LoginActivity extends AppCompatActivity {
                     public void onChanged(APIResponse apiResponse) {
                         // Check if the APIResponse indicates a successful login
                         if (apiResponse != null && apiResponse.getStatus().equals("success")) {
+                            User user = new User();
+                            user.setName(apiResponse.getData().getUser().getName());
+                            user.setEmail(email);
+                            user.setPassword(password);
+                            user.setRole(apiResponse.getData().getUser().getRole());
+                            API.saveCredentials(LoginActivity.this, user);
                             // Navigate to MainActivity or perform any other success action
                             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                             startActivity(intent);
