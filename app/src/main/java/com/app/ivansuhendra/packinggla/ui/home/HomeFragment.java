@@ -14,6 +14,7 @@ import androidx.navigation.Navigation;
 
 import com.app.ivansuhendra.packinggla.R;
 import com.app.ivansuhendra.packinggla.databinding.FragmentHomeBinding;
+import com.app.ivansuhendra.packinggla.net.API;
 import com.app.ivansuhendra.packinggla.viewmodel.PalletTransferViewModel;
 
 public class HomeFragment extends Fragment {
@@ -34,6 +35,9 @@ public class HomeFragment extends Fragment {
 
         binding = FragmentHomeBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
+
+        binding.tvName.setText(API.currentUser(getContext()).getName());
+        binding.tvDept.setText(API.currentUser(getContext()).getRole());
 
         binding.btnTransfer.setOnClickListener(new View.OnClickListener() {
             @Override
