@@ -52,6 +52,10 @@ public interface APIService {
     @GET("pallet-transfer/" + "search-carton")
     Call<APIResponse> searchCarton(@Query("carton_barcode") String barcode);
 
+    @FormUrlEncoded
+    @POST("pallet-transfer/" + "complete-preparation")
+    Call<APIResponse> completePreparation(@Field("pallet_transfer_id") int palletTransferId);
+
     @GET("location")
     Call<APIResponse> getLocation();
 

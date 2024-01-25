@@ -38,6 +38,8 @@
                 <LinearLayout
                     android:id="@+id/bgStatus"
                     android:layout_width="wrap_content"
+                    android:paddingVertical="4dp"
+                    android:paddingHorizontal="8dp"
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:orientation="horizontal">
@@ -46,9 +48,7 @@
                         android:id="@+id/tvStatusProgressLayer"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:gravity="left"
-                        android:paddingHorizontal="6dp"
-                        android:paddingVertical="1dp"
+                        android:gravity="center"
                         android:text="Ready to Transfer"
                         android:textAppearance="@style/TextAppearance.Bold10"
                         android:textColor="@color/white"

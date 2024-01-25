@@ -204,6 +204,23 @@ public class PalletTransferRepository {
         return mutableLiveData;
     }
 
+    public LiveData<APIResponse> completePreparationResponse(int palletTransferId) {
+        final MutableLiveData<APIResponse> mutableLiveData = new MutableLiveData<>();
+        API.service().completePreparation(palletTransferId).enqueue(new APICallback<APIResponse>(mContext) {
+            @Override
+            protected void onSuccess(APIResponse apiResponse) {
+                mutableLiveData.setValue(apiResponse);
+
+            }
+
+            @Override
+            protected void onError(BadRequest error) {
+
+            }
+        });
+        return mutableLiveData;
+    }
+
     public LiveData<APIResponse> searchCartonResponse(String barcode) {
         final MutableLiveData<APIResponse> mutableLiveData = new MutableLiveData<>();
         API.service().searchCarton(barcode).enqueue(new Callback<APIResponse>() {

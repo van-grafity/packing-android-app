@@ -174,6 +174,7 @@ public class EditTransferNoteActivity extends AppCompatActivity {
                     progressDialog.show(); // Show loading indicator
                     if (apiResponse.getStatus().equals("success")) {
                         Toast.makeText(EditTransferNoteActivity.this, apiResponse.getMessage(), Toast.LENGTH_SHORT).show();
+
                         // insert ke database dan update adapter
                         mDbHelper.insertCarton(apiResponse.getData().getCarton());
                         provideDbDataFromServer();
@@ -192,9 +193,13 @@ public class EditTransferNoteActivity extends AppCompatActivity {
                         carton.setPcs(apiResponse.getData().getCarton().getPcs());
                         carton.setPacked(apiResponse.getData().getCarton().getPacked());
 
-                        cartons.add(carton);
-                        mAdapter.setData(cartons);
-                        mAdapter.notifyDataSetChanged();
+                        if (!isCartonInList(carton)) {
+                            cartons.add(carton);
+                            mAdapter.setData(cartons);
+                            mAdapter.notifyDataSetChanged();
+                        } else {
+                            Toast.makeText(EditTransferNoteActivity.this, "This carton is already in the list", Toast.LENGTH_SHORT).show();
+                        }
                         if (progressDialog != null && progressDialog.isShowing()) {
                             progressDialog.cancel();
                         }
@@ -218,6 +223,16 @@ public class EditTransferNoteActivity extends AppCompatActivity {
                 }
             });
         }
+    }
+
+    private boolean isCartonInList(Carton carton) {
+        for (Carton existingCarton : cartons) {
+            // Compare based on some unique identifier, for example, carton ID or barcode
+            if (existingCarton.getId() == carton.getId()) {
+                return true; // Carton already exists in the list
+            }
+        }
+        return false; // Carton not found in the list
     }
 
     private void checkAndLoadDataWithDelay() {
@@ -366,22 +381,24 @@ public class EditTransferNoteActivity extends AppCompatActivity {
 
         // pertama di load data dari server ke db
         public void insertCarton(Carton carton) {
-            SQLiteDatabase db = this.getWritableDatabase();
-            ContentValues contentValues = new ContentValues();
-            contentValues.put("carton_id", carton.getId());
-            contentValues.put("carton_barcode", carton.getCartonBarcode());
-            contentValues.put("po_number", carton.getPoNo());
-            contentValues.put("packinglist_id", carton.getPackingListId());
-            contentValues.put("pl_number", carton.getPlNo());
-            contentValues.put("carton_number", carton.getCartonNo());
-            contentValues.put("gl_number", carton.getGlNo());
-            contentValues.put("buyer_name", carton.getBuyer());
-            contentValues.put("season", carton.getSeason());
-            contentValues.put("content", carton.getContent());
-            contentValues.put("total_pcs", carton.getPcs());
-            contentValues.put("flag_packed", carton.getPacked());
-            db.insert("carton", null, contentValues);
-            db.close();
+            if (!isCartonExist(carton)) { // Check if carton already exists
+                SQLiteDatabase db = this.getWritableDatabase();
+                ContentValues contentValues = new ContentValues();
+                contentValues.put("carton_id", carton.getId());
+                contentValues.put("carton_barcode", carton.getCartonBarcode());
+                contentValues.put("po_number", carton.getPoNo());
+                contentValues.put("packinglist_id", carton.getPackingListId());
+                contentValues.put("pl_number", carton.getPlNo());
+                contentValues.put("carton_number", carton.getCartonNo());
+                contentValues.put("gl_number", carton.getGlNo());
+                contentValues.put("buyer_name", carton.getBuyer());
+                contentValues.put("season", carton.getSeason());
+                contentValues.put("content", carton.getContent());
+                contentValues.put("total_pcs", carton.getPcs());
+                contentValues.put("flag_packed", carton.getPacked());
+                db.insert("carton", null, contentValues);
+                db.close();
+            }
         }
 
         // kedua di load data dari db ke adapter
@@ -410,6 +427,16 @@ public class EditTransferNoteActivity extends AppCompatActivity {
             cursor.close();
             db.close();
             return cartonArrayList;
+        }
+
+        // Check if the carton already exists in the database
+        private boolean isCartonExist(Carton carton) {
+            SQLiteDatabase db = this.getReadableDatabase();
+            Cursor cursor = db.rawQuery("SELECT * FROM carton WHERE carton_barcode = ?", new String[]{carton.getCartonBarcode()});
+            boolean exists = cursor.moveToFirst(); // If cursor moves to the first row, carton exists
+            cursor.close();
+            db.close();
+            return exists;
         }
 
         // delete carton where id

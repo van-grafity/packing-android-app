@@ -1,5 +1,8 @@
 package com.app.ivansuhendra.packinggla.ui.home;
 
+import static android.content.Context.MODE_PRIVATE;
+
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,15 +15,18 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
+import com.app.ivansuhendra.packinggla.LoginActivity;
 import com.app.ivansuhendra.packinggla.R;
 import com.app.ivansuhendra.packinggla.databinding.FragmentHomeBinding;
+import com.app.ivansuhendra.packinggla.model.User;
 import com.app.ivansuhendra.packinggla.net.API;
+import com.app.ivansuhendra.packinggla.utils.GlobalVars;
 import com.app.ivansuhendra.packinggla.viewmodel.PalletTransferViewModel;
 
-public class HomeFragment extends Fragment {
-    private static final String TAG = "HomeFragment";
+import br.com.kots.mob.complex.preferences.ComplexPreferences;
 
-    private PalletTransferViewModel palletTransferViewModel;
+public class HomeFragment extends Fragment {
+
     private FragmentHomeBinding binding;
 
     @Override
@@ -30,14 +36,14 @@ public class HomeFragment extends Fragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        palletTransferViewModel =
-                new ViewModelProvider(this).get(PalletTransferViewModel.class);
 
         binding = FragmentHomeBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        binding.tvName.setText(API.currentUser(getContext()).getName());
-        binding.tvDept.setText(API.currentUser(getContext()).getRole());
+        if (API.currentUser(getContext()) != null) {
+            binding.tvName.setText(API.currentUser(getContext()).getName());
+            binding.tvDept.setText(API.currentUser(getContext()).getRole());
+        }
 
         binding.btnTransfer.setOnClickListener(new View.OnClickListener() {
             @Override

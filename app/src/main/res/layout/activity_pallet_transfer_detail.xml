@@ -92,15 +92,15 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:paddingHorizontal="8dp"
+                    android:paddingVertical="4dp">
 
                     <TextView
                         android:id="@+id/tvStatusProgressLayer"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:gravity="left"
-                        android:paddingHorizontal="6dp"
-                        android:paddingVertical="1dp"
+                        android:gravity="center"
                         android:text="Ready to Transfer"
                         android:textAppearance="@style/TextAppearance.Bold10"
                         android:textColor="@color/white"
@@ -209,12 +209,27 @@
             android:orientation="vertical"
             android:paddingHorizontal="12dp">
 
-            <TextView
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Transfer Note List : "
-                android:textAppearance="@style/TextAppearance.Bold24"
-                android:textColor="@color/colorPrimary" />
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Transfer Note List : "
+                    android:textAppearance="@style/TextAppearance.Bold24"
+                    android:textColor="@color/colorPrimary" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_new_transfer_note"
+                    android:layout_width="wrap_content"
+                    android:layout_height="38dp"
+                    android:text="New Transfer Note"
+                    app:cornerRadius="6dp" />
+            </LinearLayout>
 
 
             <androidx.legacy.widget.Space
@@ -569,9 +584,10 @@
             android:layout_height="wrap_content" />
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/btn_new_transfer_note"
+            android:id="@+id/btn_completing"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="New Transfer Note" />
+            android:backgroundTint="#39A48A"
+            android:text="COMPLETING PREPARATION" />
     </LinearLayout>
 </RelativeLayout>

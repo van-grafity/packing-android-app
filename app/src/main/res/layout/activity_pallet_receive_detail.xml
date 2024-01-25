@@ -92,15 +92,15 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:paddingHorizontal="8dp"
+                    android:paddingVertical="4dp">
 
                     <TextView
                         android:id="@+id/tvStatusProgressLayer"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:gravity="left"
-                        android:paddingHorizontal="6dp"
-                        android:paddingVertical="1dp"
+                        android:gravity="center"
                         android:text="Ready to Transfer"
                         android:textAppearance="@style/TextAppearance.Bold10"
                         android:textColor="@color/white"
@@ -257,9 +257,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:drawableRight="@drawable/arrow_circle"
-                android:hint="Search Rack"
-                android:textAppearance="@style/TextAppearance.Medium20"
-                android:textStyle="bold" />
+                android:hint="search rack"
+                android:textAppearance="@style/TextAppearance.Medium20" />
 
 
             <LinearLayout

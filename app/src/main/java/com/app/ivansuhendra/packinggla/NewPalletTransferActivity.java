@@ -14,11 +14,14 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 
 import com.app.ivansuhendra.packinggla.databinding.ActivityNewPalletTransferBinding;
 import com.app.ivansuhendra.packinggla.model.APIResponse;
 import com.app.ivansuhendra.packinggla.model.Location;
 import com.app.ivansuhendra.packinggla.utils.GlobalVars;
+import com.app.ivansuhendra.packinggla.viewmodel.SharedViewModel;
 import com.app.ivansuhendra.packinggla.viewmodel.TransferViewModel;
 
 import java.util.ArrayList;
@@ -31,6 +34,7 @@ public class NewPalletTransferActivity extends AppCompatActivity {
     private int locationFromId;
     private int locationToId;
     private ProgressDialog progressDialog;
+    private SharedViewModel sharedViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +57,7 @@ public class NewPalletTransferActivity extends AppCompatActivity {
         binding.etSerialNumber.setText(mSn);
 
         transferViewModel = new ViewModelProvider(this).get(TransferViewModel.class);
+        sharedViewModel = new ViewModelProvider(this).get(SharedViewModel.class);
 
         progressDialog = GlobalVars.pgDialog(NewPalletTransferActivity.this);
         progressDialog.show();
@@ -150,11 +155,19 @@ public class NewPalletTransferActivity extends AppCompatActivity {
                             AlertDialog alertDialog = alertDialogBuilder.create();
                             alertDialog.show();
                         } else {
-                            Toast.makeText(NewPalletTransferActivity.this, apiResponse.getMessage(), Toast.LENGTH_SHORT).show();
+                            sharedViewModel.setNavigateToTransfer(true);
                             finish();
                         }
                     }
                 });
+    }
+
+    private void navigateToTransferDestination() {
+        // Get the NavController from the NavHostFragment in your layout
+        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
+
+        // Navigate to the nav_transfer destination
+        navController.navigate(R.id.nav_transfer);
     }
 
     private void initData() {

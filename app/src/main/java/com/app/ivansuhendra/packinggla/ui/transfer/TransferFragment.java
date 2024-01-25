@@ -176,4 +176,10 @@ public class TransferFragment extends Fragment {
         super.onDestroyView();
         binding = null;
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        loadDataTransferList();
+    }
 }

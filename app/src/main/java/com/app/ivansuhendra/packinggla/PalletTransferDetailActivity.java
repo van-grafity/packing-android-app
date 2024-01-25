@@ -1,12 +1,15 @@
 package com.app.ivansuhendra.packinggla;
 
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -62,6 +65,12 @@ public class PalletTransferDetailActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+        binding.btnCompleting.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showConfirmationDialog();
+            }
+        });
     }
 
     private void startTransferNoteActivity(IntentType intentType) {
@@ -95,6 +104,11 @@ public class PalletTransferDetailActivity extends AppCompatActivity {
             if (apiResponse.getData().getPalletTransfer().getTransferNotes().size() != 0) {
                 setupTransferNoteAdapter(apiResponse.getData().getPalletTransfer().getTransferNotes());
                 updateViewState(ViewState.DATA_AVAILABLE);
+                if (apiResponse.getData().getPalletTransfer().getStatus().equals("Preparation in Progress") && apiResponse.getData().getPalletTransfer().getTransferNotes().size() != 0){
+                    binding.btnCompleting.setVisibility(View.VISIBLE);
+                } else if (apiResponse.getData().getPalletTransfer().getStatus().equals("Ready to Transfer")) {
+                    binding.btnCompleting.setVisibility(View.GONE);
+                }
             } else {
                 updateViewState(ViewState.NO_DATA);
             }
@@ -129,6 +143,7 @@ public class PalletTransferDetailActivity extends AppCompatActivity {
                 }
                 break;
             case NO_DATA:
+                binding.btnCompleting.setVisibility(View.GONE);
                 binding.rvTransferNote.setVisibility(View.GONE);
                 binding.tvNoData.setVisibility(View.VISIBLE);
                 if (progressDialog != null && progressDialog.isShowing()) {
@@ -136,5 +151,37 @@ public class PalletTransferDetailActivity extends AppCompatActivity {
                 }
                 break;
         }
+
+    }
+
+    private void showConfirmationDialog() {
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(PalletTransferDetailActivity.this);
+
+        alertDialogBuilder.setMessage("Are preparations complete?\n\nAfter completing preparation, you cannot change any data on this pallet.");
+
+        alertDialogBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                dialog.dismiss(); // Tutup dialog
+            }
+        });
+
+        alertDialogBuilder.setPositiveButton("Yes Complete", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                performCompletingAction();
+
+                dialog.dismiss();
+            }
+        });
+
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
+    }
+
+    private void performCompletingAction() {
+        // ...
+        transferViewModel.completePreparationLiveData(mPallet.getId()).observe(this, apiResponse -> {
+            Toast.makeText(PalletTransferDetailActivity.this, apiResponse.getMessage(), Toast.LENGTH_SHORT).show();
+            finish();
+        });
     }
 }

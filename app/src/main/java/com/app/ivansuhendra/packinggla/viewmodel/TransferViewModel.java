@@ -67,6 +67,11 @@ public class TransferViewModel extends ViewModel {
         return palletTransferResponseData;
     }
 
+    public LiveData<APIResponse> completePreparationLiveData(int palletTransferId) {
+        palletTransferResponseData = palletTransferRepository.completePreparationResponse(palletTransferId);
+        return palletTransferResponseData;
+    }
+
     public LiveData<APIResponse> searchCartonLiveData(String barcode) {
         palletTransferResponseData = palletTransferRepository.searchCartonResponse(barcode);
         return palletTransferResponseData;
