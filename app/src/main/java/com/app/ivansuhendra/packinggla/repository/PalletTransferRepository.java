@@ -24,9 +24,9 @@ public class PalletTransferRepository {
         this.mContext = context;
     }
 
-    public LiveData<APIResponse> getPalletTransfersResponse(int limit, int page) {
+    public LiveData<APIResponse> getPalletTransfersResponse(int limit, int page, String q) {
         final MutableLiveData<APIResponse> mutableLiveData = new MutableLiveData<>();
-        API.service().getPalletTransfer(limit, page).enqueue(new Callback<APIResponse>() {
+        API.service().getPalletTransfer(limit, page, q).enqueue(new Callback<APIResponse>() {
             @Override
             public void onResponse(Call<APIResponse> call, Response<APIResponse> response) {
                 mutableLiveData.setValue(response.body());
@@ -237,9 +237,9 @@ public class PalletTransferRepository {
         return mutableLiveData;
     }
 
-    public LiveData<APIResponse> getPalletReceiveResponse(int limit, int page) {
+    public LiveData<APIResponse> getPalletReceiveResponse(int limit, int page, String q) {
         final MutableLiveData<APIResponse> mutableLiveData = new MutableLiveData<>();
-        API.service().getPalletReceive(limit, page).enqueue(new Callback<APIResponse>() {
+        API.service().getPalletReceive(limit, page, q).enqueue(new Callback<APIResponse>() {
             @Override
             public void onResponse(Call<APIResponse> call, Response<APIResponse> response) {
                 mutableLiveData.setValue(response.body());

@@ -15,10 +15,10 @@ import retrofit2.http.Query;
 
 public interface APIService {
     @GET("pallet-transfer")
-    Call<APIResponse> getPalletTransfer(@Query("limit") int limit, @Query("page") int page);
+    Call<APIResponse> getPalletTransfer(@Query("limit") int limit, @Query("page") int page, @Query("search") String q);
 
     @GET("pallet-receive")
-    Call<APIResponse> getPalletReceive(@Query("limit") int limit, @Query("page") int page);
+    Call<APIResponse> getPalletReceive(@Query("limit") int limit, @Query("page") int page, @Query("search") String q);
 
     @FormUrlEncoded
     @POST("pallet-receive")

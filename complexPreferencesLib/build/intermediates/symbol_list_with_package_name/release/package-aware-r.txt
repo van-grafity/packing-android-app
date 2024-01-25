@@ -1,2 +1,0 @@
-br.com.kots.mob.complex.preferences
-string app_name

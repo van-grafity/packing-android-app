@@ -19,6 +19,7 @@ import com.app.ivansuhendra.packinggla.model.PalletTransfer;
 import com.app.ivansuhendra.packinggla.utils.GlobalVars;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class PalletTransferfAdapter extends RecyclerView.Adapter<PalletTransferfAdapter.PalletTransferViewHolder> {
 
@@ -30,6 +31,18 @@ public class PalletTransferfAdapter extends RecyclerView.Adapter<PalletTransferf
         this.mContext = context;
         this.mPalletTransfers = palletTransfers;
         this.mClickHandler = clickHandler;
+    }
+
+    public void setPalletTransfers(List<PalletTransfer> newPalletTransfers) {
+        mPalletTransfers.clear();
+        mPalletTransfers.addAll(newPalletTransfers);
+        notifyDataSetChanged();
+    }
+
+    public void addPalletTransfers(List<PalletTransfer> newPalletTransfers) {
+        int startPosition = mPalletTransfers.size();
+        mPalletTransfers.addAll(newPalletTransfers);
+        notifyItemRangeInserted(startPosition, newPalletTransfers.size());
     }
 
     @NonNull

@@ -121,7 +121,7 @@ public class ReceiveFragment extends Fragment {
 //        snackbar.dismiss(); // Tutup Snackbar setelah berhasil reload
 
         transferViewModel = new ViewModelProvider(this).get(TransferViewModel.class);
-        transferViewModel.getPalletReceiveLiveData(100, 1).observe(getViewLifecycleOwner(), new Observer<APIResponse>() {
+        transferViewModel.getPalletReceiveLiveData(100, 1, "").observe(getViewLifecycleOwner(), new Observer<APIResponse>() {
             @Override
             public void onChanged(APIResponse apiResponse) {
                 palletTransferAdapter = new PalletTransferfAdapter(getActivity(), apiResponse.getData().getPalletReceive(), new PalletTransferfAdapter.itemAdapterOnClickHandler() {
