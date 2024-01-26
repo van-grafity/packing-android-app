@@ -82,7 +82,7 @@
             tools:ignore="RtlSymmetry">
 
             <EditText
-                android:id="@+id/editQuery"
+                android:id="@+id/et_search"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/custom_rounded_button_gray"

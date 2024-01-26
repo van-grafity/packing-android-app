@@ -213,7 +213,6 @@
                     android:text="Add Carton" />
             </LinearLayout>
 
-
             <androidx.legacy.widget.Space
                 android:layout_width="match_parent"
                 android:layout_height="14dp" />

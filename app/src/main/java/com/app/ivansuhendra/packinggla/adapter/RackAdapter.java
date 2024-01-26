@@ -58,13 +58,16 @@ public class RackAdapter extends RecyclerView.Adapter<RackAdapter.RackViewHolder
         notifyItemRemoved(position);
     }
 
-    public void addData(List<Rack> newData) {
-        mItems.clear();  // Clear existing data before adding new data
+    public void setData(List<Rack> newData) {
+        mItems.clear();
         mItems.addAll(newData);
         notifyDataSetChanged();
-//        int startPosition = mItems.size();
-//        mItems.addAll(newData);
-//        notifyItemRangeInserted(startPosition, newData.size());
+    }
+
+    public void addData(List<Rack> newData) {
+        int startPosition = mItems.size();
+        mItems.addAll(newData);
+        notifyItemRangeInserted(startPosition, newData.size());
     }
 
     @Override

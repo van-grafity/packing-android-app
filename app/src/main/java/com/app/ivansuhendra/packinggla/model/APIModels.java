@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName;
 import java.util.ArrayList;
 
 public class APIModels {
-    @SerializedName("pallet_transfers")
+    @SerializedName("pallet_transfer_list")
     private ArrayList<PalletTransfer> palletTransfers;
 
     @SerializedName("pallet_transfer")

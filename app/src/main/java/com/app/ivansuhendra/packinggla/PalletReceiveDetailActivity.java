@@ -138,8 +138,11 @@ public class PalletReceiveDetailActivity extends AppCompatActivity implements Ad
 
             @Override
             public void afterTextChanged(Editable s) {
+                // Reset pagination variables
                 currentPage = 1;
                 isLoading = false;
+
+                // Call loadDataRackFromServer with the updated search query
                 loadDataRackFromServer(s.toString());
             }
         });
@@ -172,7 +175,7 @@ public class PalletReceiveDetailActivity extends AppCompatActivity implements Ad
 
     private void loadDataRackFromServer(String serialNo) {
         progressDialog.show();
-        transferViewModel.getRackLiveData(50, currentPage, serialNo).observe(PalletReceiveDetailActivity.this, new Observer<APIResponse>() {
+        transferViewModel.getRackLiveData(currentPage, serialNo).observe(PalletReceiveDetailActivity.this, new Observer<APIResponse>() {
             @Override
             public void onChanged(APIResponse apiResponse) {
                 if (apiResponse != null) {
@@ -180,7 +183,7 @@ public class PalletReceiveDetailActivity extends AppCompatActivity implements Ad
 
                     if (currentPage == 1) {
                         // If it's the first page, create a new adapter
-                        palletTransferAdapter.addData(rackList);
+                        palletTransferAdapter.setData(rackList);
                     } else {
                         // If it's not the first page, add data to the existing adapter
                         palletTransferAdapter.addData(rackList);

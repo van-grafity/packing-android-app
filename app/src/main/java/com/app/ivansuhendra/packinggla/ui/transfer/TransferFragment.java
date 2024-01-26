@@ -8,6 +8,7 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -18,18 +19,22 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.app.ivansuhendra.packinggla.MainActivity;
 import com.app.ivansuhendra.packinggla.PalletTransferDetailActivity;
 import com.app.ivansuhendra.packinggla.ScanQrActivity;
 import com.app.ivansuhendra.packinggla.adapter.PalletTransferfAdapter;
 import com.app.ivansuhendra.packinggla.databinding.FragmentTransferBinding;
 import com.app.ivansuhendra.packinggla.model.APIResponse;
 import com.app.ivansuhendra.packinggla.model.PalletTransfer;
+import com.app.ivansuhendra.packinggla.presenter.TransferPresenter;
+import com.app.ivansuhendra.packinggla.presenter.TransferPresenterImpl;
 import com.app.ivansuhendra.packinggla.utils.GlobalVars;
-import com.app.ivansuhendra.packinggla.viewmodel.PalletTransferViewModel;
+import com.app.ivansuhendra.packinggla.view.TransferView;
+import com.app.ivansuhendra.packinggla.view.TransferViewImpl;
 import com.app.ivansuhendra.packinggla.viewmodel.TransferViewModel;
-import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class TransferFragment extends Fragment {
     private static final String TAG = "TransferFragment";
@@ -39,7 +44,8 @@ public class TransferFragment extends Fragment {
     private PalletTransferfAdapter palletTransferAdapter;
     private ProgressDialog progressDialog;
     private boolean isLoading = false;
-    private int currentPage = 1;
+    private TransferPresenter presenter;
+    private TransferView transferView;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -48,9 +54,9 @@ public class TransferFragment extends Fragment {
 
         setupRecyclerView();
 
-        // Initialize ViewModel and observe data changes
-        transferViewModel = new ViewModelProvider(this).get(TransferViewModel.class);
-        loadInitialData();
+        transferView = new TransferViewImpl(getActivity(), palletTransferAdapter);
+        presenter = new TransferPresenterImpl(getActivity(), transferView, new ViewModelProvider(this).get(TransferViewModel.class));
+        presenter.loadData("");
 
         // Implement scroll listener to load more data as user scrolls
         binding.rvPalletTransfer.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -59,7 +65,7 @@ public class TransferFragment extends Fragment {
                 super.onScrollStateChanged(recyclerView, newState);
                 if (!recyclerView.canScrollVertically(1) && !isLoading) {
                     // Reached end of list, load more data
-                    loadMoreData();
+                    presenter.loadMoreData(binding.etSearch.getText().toString());
                 }
             }
         });
@@ -73,14 +79,7 @@ public class TransferFragment extends Fragment {
             }
         });
 
-        transferViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
-            @Override
-            public void onChanged(@Nullable String s) {
-                // Handle text changes if needed
-            }
-        });
-
-        binding.editQuery.addTextChangedListener(new TextWatcher() {
+        binding.etSearch.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
             }
@@ -92,6 +91,12 @@ public class TransferFragment extends Fragment {
             @Override
             public void afterTextChanged(Editable editable) {
                 String query = editable.toString().trim();
+//                Toast.makeText(getContext(), query, Toast.LENGTH_SHORT).show();
+                // Check if the query is not empty and if the user pressed enter
+                presenter.loadData(query);
+                if (progressDialog != null && progressDialog.isShowing()) {
+                    progressDialog.cancel();
+                }
             }
         });
 
@@ -113,51 +118,15 @@ public class TransferFragment extends Fragment {
             }
         });
 
-
         GridLayoutManager layoutManager = new GridLayoutManager(getActivity(), 2, LinearLayoutManager.VERTICAL, false);
         binding.rvPalletTransfer.setLayoutManager(layoutManager);
         binding.rvPalletTransfer.setAdapter(palletTransferAdapter);
     }
 
-    private void loadInitialData() {
-        progressDialog = ProgressDialog.show(getActivity(), "", "Loading...", true);
-        isLoading = true;
-        transferViewModel.getPalletTransferLiveData(1, "").observe(getViewLifecycleOwner(), new Observer<APIResponse>() {
-            @Override
-            public void onChanged(APIResponse apiResponse) {
-                progressDialog.dismiss();
-                isLoading = false;
-                palletTransferAdapter.setPalletTransfers(apiResponse.getData().getPalletTransfers());
-                if (progressDialog != null && progressDialog.isShowing()) {
-                    progressDialog.cancel();
-                }
-            }
-        });
-    }
-
-    private void loadMoreData() {
-        currentPage++;
-        isLoading = true;
-        transferViewModel.getPalletTransferLiveData(currentPage, "").observe(getViewLifecycleOwner(), new Observer<APIResponse>() {
-            @Override
-            public void onChanged(APIResponse apiResponse) {
-                isLoading = false;
-                palletTransferAdapter.addPalletTransfers(apiResponse.getData().getPalletTransfers());
-                if (progressDialog != null && progressDialog.isShowing()) {
-                    progressDialog.cancel();
-                }
-            }
-        });
-    }
-
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        presenter.onDestroy();
         binding = null;
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
     }
 }
