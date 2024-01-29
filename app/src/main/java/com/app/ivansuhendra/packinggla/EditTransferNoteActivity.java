@@ -173,8 +173,6 @@ public class EditTransferNoteActivity extends AppCompatActivity {
                 public void onChanged(APIResponse apiResponse) {
                     progressDialog.show(); // Show loading indicator
                     if (apiResponse.getStatus().equals("success")) {
-                        Toast.makeText(EditTransferNoteActivity.this, apiResponse.getMessage(), Toast.LENGTH_SHORT).show();
-
                         // insert ke database dan update adapter
                         mDbHelper.insertCarton(apiResponse.getData().getCarton());
                         provideDbDataFromServer();
@@ -335,9 +333,25 @@ public class EditTransferNoteActivity extends AppCompatActivity {
         mAdapter = new CartonAdapter(EditTransferNoteActivity.this, new ArrayList<>(), new CartonAdapter.onItemClickListener() {
             @Override
             public void onClick(View view, int position, Carton carton) {
-               mAdapter.removeItem(position);
-                mDbHelper.deleteCarton(carton.getId());
-                mAdapter.notifyDataSetChanged();
+                AlertDialog.Builder builder = new AlertDialog.Builder(EditTransferNoteActivity.this);
+                builder.setTitle("Konfirmasi");
+                builder.setMessage("Apakah Anda yakin ingin menghapus item ini?");
+                builder.setPositiveButton("Ya", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        mAdapter.removeItem(position);
+                        mDbHelper.deleteCarton(carton.getId());
+                        mAdapter.notifyDataSetChanged();
+                    }
+                });
+                builder.setNegativeButton("Tidak", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+                AlertDialog alertDialog = builder.create();
+                alertDialog.show();
             }
         });
 

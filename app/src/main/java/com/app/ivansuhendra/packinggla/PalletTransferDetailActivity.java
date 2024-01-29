@@ -60,9 +60,11 @@ public class PalletTransferDetailActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(PalletTransferDetailActivity.this, EditTransferNoteActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_SINGLE_TOP);
                 intent.putExtra(GlobalVars.PALLET_TRANSFER_LIST, mPallet);
                 intent.putExtra(GlobalVars.TRANSFER_NOTE_LIST, 0);
                 startActivity(intent);
+                finish();
             }
         });
         binding.btnCompleting.setOnClickListener(new View.OnClickListener() {
@@ -106,7 +108,7 @@ public class PalletTransferDetailActivity extends AppCompatActivity {
                 updateViewState(ViewState.DATA_AVAILABLE);
                 if (apiResponse.getData().getPalletTransfer().getStatus().equals("Preparation in Progress") && apiResponse.getData().getPalletTransfer().getTransferNotes().size() != 0){
                     binding.btnCompleting.setVisibility(View.VISIBLE);
-                } else if (apiResponse.getData().getPalletTransfer().getStatus().equals("Ready to Transfer")) {
+                } else {
                     binding.btnCompleting.setVisibility(View.GONE);
                 }
             } else {
@@ -120,6 +122,7 @@ public class PalletTransferDetailActivity extends AppCompatActivity {
             @Override
             public void onClick(View view, int position, TransferNote transferNote) {
                 Intent intent = new Intent(PalletTransferDetailActivity.this, EditTransferNoteActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_SINGLE_TOP);
                 intent.putExtra(GlobalVars.PALLET_TRANSFER_LIST, mPallet);
                 intent.putExtra(GlobalVars.TRANSFER_NOTE_LIST, transferNote);
                 startActivity(intent);
