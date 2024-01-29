@@ -599,6 +599,6 @@
             android:id="@+id/btn_send_pallet"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Send Pallet to Back" />
+            android:text="Send Pallet to Rack" />
     </LinearLayout>
 </RelativeLayout>

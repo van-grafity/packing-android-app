@@ -14,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.app.ivansuhendra.packinggla.adapter.TransferNoteAdapter;
 import com.app.ivansuhendra.packinggla.databinding.ActivityPalletTransferDetailBinding;
@@ -52,6 +53,23 @@ public class PalletTransferDetailActivity extends AppCompatActivity {
         binding = ActivityPalletTransferDetailBinding.inflate(LayoutInflater.from(this));
         setContentView(binding.getRoot());
         binding.rvTransferNote.setLayoutManager(new GridLayoutManager(this, 1, LinearLayoutManager.VERTICAL, false));
+
+        binding.swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                // Panggil method untuk melakukan refresh data
+                refreshData();
+            }
+        });
+    }
+
+    private void refreshData() {
+        // Method ini akan dipanggil saat pengguna menarik SwipeRefreshLayout
+        // Taruh kode untuk refresh data di sini, misalnya:
+        initializeTransferNoteRecyclerView(); // Refresh RecyclerView
+
+        // Setelah selesai refresh, beritahu SwipeRefreshLayout untuk menghentikan animasi refresh
+        binding.swipeRefreshLayout.setRefreshing(false);
     }
 
     private void initializeClickListeners() {
@@ -60,11 +78,9 @@ public class PalletTransferDetailActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(PalletTransferDetailActivity.this, EditTransferNoteActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_SINGLE_TOP);
                 intent.putExtra(GlobalVars.PALLET_TRANSFER_LIST, mPallet);
                 intent.putExtra(GlobalVars.TRANSFER_NOTE_LIST, 0);
                 startActivity(intent);
-                finish();
             }
         });
         binding.btnCompleting.setOnClickListener(new View.OnClickListener() {
@@ -90,13 +106,6 @@ public class PalletTransferDetailActivity extends AppCompatActivity {
     private void initializePalletTransferDetails() {
         transferViewModel = new ViewModelProvider(this).get(TransferViewModel.class);
         mPallet = getIntent().getParcelableExtra(GlobalVars.PALLET_TRANSFER_LIST);
-
-        binding.bgStatus.setBackgroundColor(Color.parseColor("#" + mPallet.getColorCode()));
-        binding.tvStatusProgressLayer.setText(mPallet.getStatus());
-        binding.tvTransactionNumber.setText(mPallet.getTransactionNumber());
-        binding.tvPalletNo.setText(mPallet.getPalletSerialNumber());
-        binding.tvTotalCarton.setText(mPallet.getTotalCarton());
-        binding.tvLocationFrom.setText(mPallet.getLocationFrom());
     }
 
     private void initializeTransferNoteRecyclerView() {
@@ -104,7 +113,9 @@ public class PalletTransferDetailActivity extends AppCompatActivity {
 
         transferViewModel.getPalletTransferDetailLiveData(mPallet.getId()).observe(this, apiResponse -> {
             if (apiResponse.getData().getPalletTransfer().getTransferNotes().size() != 0) {
+
                 setupTransferNoteAdapter(apiResponse.getData().getPalletTransfer().getTransferNotes());
+
                 updateViewState(ViewState.DATA_AVAILABLE);
                 if (apiResponse.getData().getPalletTransfer().getStatus().equals("Preparation in Progress") && apiResponse.getData().getPalletTransfer().getTransferNotes().size() != 0){
                     binding.btnCompleting.setVisibility(View.VISIBLE);
@@ -114,6 +125,12 @@ public class PalletTransferDetailActivity extends AppCompatActivity {
             } else {
                 updateViewState(ViewState.NO_DATA);
             }
+            binding.bgStatus.setBackgroundColor(Color.parseColor("#" + apiResponse.getData().getPalletTransfer().getColorCode()));
+            binding.tvStatusProgressLayer.setText(apiResponse.getData().getPalletTransfer().getStatus());
+            binding.tvTransactionNumber.setText(apiResponse.getData().getPalletTransfer().getTransactionNumber());
+            binding.tvPalletNo.setText(apiResponse.getData().getPalletTransfer().getPalletSerialNumber());
+            binding.tvTotalCarton.setText(apiResponse.getData().getPalletTransfer().getTotalCarton());
+            binding.tvLocationFrom.setText(apiResponse.getData().getPalletTransfer().getLocationFrom());
         });
     }
 
