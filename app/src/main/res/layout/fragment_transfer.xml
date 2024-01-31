@@ -119,6 +119,7 @@
         android:layout_toLeftOf="@+id/btn_new_pallet_transfer"
         android:backgroundTint="#D8D8D8"
         android:text="Back"
+        android:visibility="gone"
         android:textColor="@color/black" />
 
     <com.google.android.material.button.MaterialButton

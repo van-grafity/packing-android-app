@@ -105,6 +105,13 @@ public class PalletReceiveDetailActivity extends AppCompatActivity implements Ad
                 showRackListBottomSheet();
             }
         });
+
+        binding.btnBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
     }
 
     private void showRackListBottomSheet() {
@@ -240,6 +247,24 @@ public class PalletReceiveDetailActivity extends AppCompatActivity implements Ad
     private void updateUI(APIResponse apiResponse) {
 //        Toast.makeText(PalletReceiveDetailActivity.this, ""+apiResponse.getData().getPalletTransfer().getPalletTransferId(), Toast.LENGTH_SHORT).show();
         // Update UI based on API response
+        if (apiResponse.getStatus().equals("error")){
+            binding.rlNull.setVisibility(View.GONE);
+            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(PalletReceiveDetailActivity.this);
+            alertDialogBuilder
+                    .setMessage(apiResponse.getMessage())
+                    .setCancelable(false)
+                    .setNeutralButton("Ok", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            finish();
+                        }
+                    });
+
+            AlertDialog alertDialog = alertDialogBuilder.create();
+            alertDialog.show();
+            if (progressDialog != null && progressDialog.isShowing()) {
+                progressDialog.cancel();
+            }
+        } else {
         binding.tvPalletTransferNo.setText(apiResponse.getData().getPalletTransfer().getPalletSerialNumber());
 //        binding.bgStatus.setBackground(getDrawable(GlobalVars.provideStatus(apiResponse.getData().getPalletTransfer().getStatus())));
         binding.bgStatus.setBackgroundColor(Color.parseColor("#" + apiResponse.getData().getPalletTransfer().getColorCode()));
@@ -251,9 +276,17 @@ public class PalletReceiveDetailActivity extends AppCompatActivity implements Ad
         palletBarcode = apiResponse.getData().getPalletTransfer().getPalletSerialNumber();
         provideRack();
         setupTransferNoteAdapter(apiResponse.getData().getPalletTransfer().getTransferNotes(), apiResponse.getData().getPalletTransfer().getPalletSerialNumber());
+        }
     }
 
     private void createPalletReceive() {
+        if (getRackId() == 0) {
+            Toast.makeText(this, "Please select rack", Toast.LENGTH_SHORT).show();
+            if (progressDialog != null && progressDialog.isShowing()) {
+                progressDialog.cancel();
+            }
+            return;
+        }
         String receivedBy = "Andre"; // Obtain the received by information;
         transferViewModel.createPalletReceiveLiveData(palletTransferId, getRackId(), receivedBy, palletBarcode).observe(this, new Observer<APIResponse>() {
             @Override

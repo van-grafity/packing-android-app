@@ -32,6 +32,11 @@ public class TransferViewModel extends ViewModel {
         return palletTransferResponseData;
     }
 
+    public LiveData<APIResponse> getPalletAvailability(String palletSerialNumber) {
+        palletTransferResponseData = palletTransferRepository.getPalletAvailabilityResponse(palletSerialNumber);
+        return palletTransferResponseData;
+    }
+
     public LiveData<APIResponse> getPalletTransferDetailLiveData(int id) {
         palletTransferResponseData = palletTransferRepository.getPalletTransferDetailResponse(id);
         return palletTransferResponseData;

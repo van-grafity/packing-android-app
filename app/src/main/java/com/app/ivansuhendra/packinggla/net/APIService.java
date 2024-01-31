@@ -31,6 +31,9 @@ public interface APIService {
     @POST("pallet-transfer")
     Call<APIResponse> savePalletTransferResponse(@Field("pallet_serial_number") String palletSerialNumber,@Field("location_from") int locationFrom,@Field("location_to") int locationTo);
 
+    @GET("pallet-transfer" + "/check-pallet-availability")
+    Call<APIResponse> getPalletAvailabilityResponse(@Query("pallet_serial_number") String palletSerialNumber);
+
     @FormUrlEncoded
     @POST("login")
     Call<APIResponse> loginResponse(@Field("email") String email,@Field("password") String password);

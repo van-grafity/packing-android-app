@@ -19,7 +19,6 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import com.app.ivansuhendra.packinggla.EditTransferNoteActivity;
 import com.app.ivansuhendra.packinggla.MainActivity;
 import com.app.ivansuhendra.packinggla.PalletReceiveDetailActivity;
 import com.app.ivansuhendra.packinggla.ScanQrActivity;

@@ -60,50 +60,79 @@ public class NewPalletTransferActivity extends AppCompatActivity {
         sharedViewModel = new ViewModelProvider(this).get(SharedViewModel.class);
 
         progressDialog = GlobalVars.pgDialog(NewPalletTransferActivity.this);
-        progressDialog.show();
-        transferViewModel.getLocationLiveData().observe(this, new Observer<APIResponse>() {
+        transferViewModel.getPalletAvailability(mSn).observe(NewPalletTransferActivity.this, new Observer<APIResponse>() {
             @Override
             public void onChanged(APIResponse apiResponse) {
-                updateSpinnerData(apiResponse.getData().getLocations());
-                if (progressDialog != null && progressDialog.isShowing()) {
-                    progressDialog.cancel();
+                if (apiResponse.getStatus().equals("error")){
+                    binding.rlNull.setVisibility(View.GONE);
+                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(NewPalletTransferActivity.this);
+                    alertDialogBuilder
+                            .setMessage(apiResponse.getMessage())
+                            .setCancelable(false)
+                            .setNeutralButton("Ok", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    finish();
+                                }
+                            });
+
+                    AlertDialog alertDialog = alertDialogBuilder.create();
+                    alertDialog.show();
+                    if (progressDialog != null && progressDialog.isShowing()) {
+                        progressDialog.cancel();
+                    }
+                } else {
+                    transferViewModel.getLocationLiveData().observe(NewPalletTransferActivity.this, new Observer<APIResponse>() {
+                        @Override
+                        public void onChanged(APIResponse apiResponse) {
+                            updateSpinnerData(apiResponse.getData().getLocations());
+                            if (progressDialog != null && progressDialog.isShowing()) {
+                                progressDialog.cancel();
+                            }
+                        }
+                    });
+
+                    binding.spLocationFrom.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                        @Override
+                        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                            Location selectedItem = (Location) parent.getItemAtPosition(position);
+                            locationFromId = selectedItem.getId();
+
+                        }
+
+                        @Override
+                        public void onNothingSelected(AdapterView<?> parent) {
+
+                        }
+                    });
+                    binding.spLocationTo.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                        @Override
+                        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                            Location selectedItem = (Location) parent.getItemAtPosition(position);
+                            locationToId = selectedItem.getId();
+
+                        }
+
+                        @Override
+                        public void onNothingSelected(AdapterView<?> parent) {
+
+                        }
+                    });
+
+                    binding.btnBack.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            finish();
+                        }
+                    });
+
+                    binding.btnSave.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            String palletSerialNumber = binding.etSerialNumber.getText().toString();
+                            showLoadingAndDelayApiCall(palletSerialNumber);
+                        }
+                    });
                 }
-            }
-        });
-//        initData();
-
-        binding.spLocationFrom.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                Location selectedItem = (Location) parent.getItemAtPosition(position);
-                locationFromId = selectedItem.getId();
-
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-        binding.spLocationTo.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                Location selectedItem = (Location) parent.getItemAtPosition(position);
-                locationToId = selectedItem.getId();
-
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-
-        binding.btnSave.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String palletSerialNumber = binding.etSerialNumber.getText().toString();
-                showLoadingAndDelayApiCall(palletSerialNumber);
             }
         });
     }
@@ -156,7 +185,18 @@ public class NewPalletTransferActivity extends AppCompatActivity {
                             alertDialog.show();
                         } else {
                             sharedViewModel.setNavigateToTransfer(true);
-                            finish();
+                            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(NewPalletTransferActivity.this);
+                            alertDialogBuilder
+                                    .setMessage(apiResponse.getMessage())
+                                    .setCancelable(false)
+                                    .setNeutralButton("Ok", new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int id) {
+                                            finish();
+                                        }
+                                    });
+
+                            AlertDialog alertDialog = alertDialogBuilder.create();
+                            alertDialog.show();
                         }
                     }
                 });

@@ -56,6 +56,22 @@ public class PalletTransferRepository {
         return mutableLiveData;
     }
 
+    public LiveData<APIResponse> getPalletAvailabilityResponse(String palletSerialNumber) {
+        final MutableLiveData<APIResponse> mutableLiveData = new MutableLiveData<>();
+        API.service().getPalletAvailabilityResponse(palletSerialNumber).enqueue(new Callback<APIResponse>() {
+            @Override
+            public void onResponse(Call<APIResponse> call, Response<APIResponse> response) {
+                mutableLiveData.setValue(response.body());
+            }
+
+            @Override
+            public void onFailure(Call<APIResponse> call, Throwable t) {
+                Toast.makeText(mContext, "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+        return mutableLiveData;
+    }
+
     public LiveData<APIResponse> getPalletTransferDetailResponse(int id) {
         final MutableLiveData<APIResponse> mutableLiveData = new MutableLiveData<>();
         API.service().getPalletTransferDetail(id).enqueue(new Callback<APIResponse>() {

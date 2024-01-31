@@ -57,18 +57,14 @@ public class PalletTransferDetailActivity extends AppCompatActivity {
         binding.swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                // Panggil method untuk melakukan refresh data
                 refreshData();
             }
         });
     }
 
     private void refreshData() {
-        // Method ini akan dipanggil saat pengguna menarik SwipeRefreshLayout
-        // Taruh kode untuk refresh data di sini, misalnya:
-        initializeTransferNoteRecyclerView(); // Refresh RecyclerView
+        initializeTransferNoteRecyclerView();
 
-        // Setelah selesai refresh, beritahu SwipeRefreshLayout untuk menghentikan animasi refresh
         binding.swipeRefreshLayout.setRefreshing(false);
     }
 
@@ -77,10 +73,11 @@ public class PalletTransferDetailActivity extends AppCompatActivity {
         binding.btnNewTransferNote.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(PalletTransferDetailActivity.this, EditTransferNoteActivity.class);
+                Intent intent = new Intent(PalletTransferDetailActivity.this, TransferNoteActivity.class);
                 intent.putExtra(GlobalVars.PALLET_TRANSFER_LIST, mPallet);
                 intent.putExtra(GlobalVars.TRANSFER_NOTE_LIST, 0);
                 startActivity(intent);
+                finish();
             }
         });
         binding.btnCompleting.setOnClickListener(new View.OnClickListener() {
@@ -89,13 +86,20 @@ public class PalletTransferDetailActivity extends AppCompatActivity {
                 showConfirmationDialog();
             }
         });
+
+        binding.btnBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
     }
 
     private void startTransferNoteActivity(IntentType intentType) {
         Class<?> activityClass;
         switch (intentType) {
             case EDIT_TRANSFER_NOTE:
-                activityClass = EditTransferNoteActivity.class;
+                activityClass = TransferNoteActivity.class;
                 break;
             default:
                 throw new IllegalArgumentException("Unsupported intent type: " + intentType);
@@ -138,11 +142,11 @@ public class PalletTransferDetailActivity extends AppCompatActivity {
         mAdapter = new TransferNoteAdapter(this, transferNotes, mPallet.getPalletSerialNumber(), new TransferNoteAdapter.onItemClickListener() {
             @Override
             public void onClick(View view, int position, TransferNote transferNote) {
-                Intent intent = new Intent(PalletTransferDetailActivity.this, EditTransferNoteActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                Intent intent = new Intent(PalletTransferDetailActivity.this, TransferNoteActivity.class);
                 intent.putExtra(GlobalVars.PALLET_TRANSFER_LIST, mPallet);
                 intent.putExtra(GlobalVars.TRANSFER_NOTE_LIST, transferNote);
                 startActivity(intent);
+                finish();
             }
         });
         binding.rvTransferNote.setAdapter(mAdapter);

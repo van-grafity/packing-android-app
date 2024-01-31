@@ -656,6 +656,7 @@
 
         <com.google.android.material.button.MaterialButton
             android:layout_width="wrap_content"
+            android:visibility="gone"
             android:layout_height="wrap_content"
             android:backgroundTint="#E0E4ED"
             android:text="Back"
