@@ -195,6 +195,8 @@ public class EditTransferNoteActivity extends AppCompatActivity {
                             cartons.add(carton);
                             mAdapter.setData(cartons);
                             mAdapter.notifyDataSetChanged();
+                            Intent intent = new Intent(EditTransferNoteActivity.this, ScanQrActivity.class);
+                            startActivityForResult(intent, REQUEST_SCAN_QR);
                         } else {
                             Toast.makeText(EditTransferNoteActivity.this, "This carton is already in the list", Toast.LENGTH_SHORT).show();
                         }
