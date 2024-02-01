@@ -60,6 +60,7 @@ public class PalletTransferDetailActivity extends AppCompatActivity {
         transferViewModel = new ViewModelProvider(this).get(TransferViewModel.class);
 
 //        https://github.com/greatyao/v2ex-android/blob/f7bdb02e2ecbab640e77b3efcfc7382901712cdf/app/src/main/java/com/yaoyumeng/v2ex2/ui/TopicActivity.java#L32
+//        https://developer.android.com/training/app-links/deep-linking.html?source=post_page-----1b9fe9e38abd--------------------------------
         Intent intent = getIntent();
         Uri data = intent.getData();
         String scheme = data != null ? data.getScheme() : ""; // "http"
