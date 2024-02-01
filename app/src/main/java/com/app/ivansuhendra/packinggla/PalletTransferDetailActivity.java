@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -35,6 +36,16 @@ public class PalletTransferDetailActivity extends AppCompatActivity {
     private TransferViewModel transferViewModel;
     private TransferNoteAdapter mAdapter;
     private ProgressDialog progressDialog;
+    private int mId;
+    private String palletSerialNumber;
+
+    public String getPalletSerialNumber() {
+        return palletSerialNumber;
+    }
+
+    public void setPalletSerialNumber(String palletSerialNumber) {
+        this.palletSerialNumber = palletSerialNumber;
+    }
 
     private enum IntentType {
         EDIT_TRANSFER_NOTE,
@@ -45,8 +56,26 @@ public class PalletTransferDetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         initializeViews();
         initializeClickListeners();
-        initializePalletTransferDetails();
-        initializeTransferNoteRecyclerView();
+
+        transferViewModel = new ViewModelProvider(this).get(TransferViewModel.class);
+
+//        https://github.com/greatyao/v2ex-android/blob/f7bdb02e2ecbab640e77b3efcfc7382901712cdf/app/src/main/java/com/yaoyumeng/v2ex2/ui/TopicActivity.java#L32
+        Intent intent = getIntent();
+        Uri data = intent.getData();
+        String scheme = data != null ? data.getScheme() : ""; // "http"
+        String host = data != null ? data.getHost() : ""; // "www.v2ex.com"
+        List<String> pathSegments = data != null ? data.getPathSegments() : null;
+        if ((scheme.equals("http")) && (host.equals("192.168.5.236")) && pathSegments != null && pathSegments.size() == 2) {
+            String idString = pathSegments.get(1); // Get the last segment as the ID
+            mId = Integer.parseInt(idString); // Parse the ID string to an integer
+            setPalletSerialNumber("");
+        } else {
+            mPallet = getIntent().getParcelableExtra(GlobalVars.PALLET_TRANSFER_LIST);
+            mId = mPallet.getId();
+            setPalletSerialNumber(mPallet.getPalletSerialNumber());
+        }
+
+        initializeTransferNoteRecyclerView(mId);
     }
 
     private void initializeViews() {
@@ -63,7 +92,7 @@ public class PalletTransferDetailActivity extends AppCompatActivity {
     }
 
     private void refreshData() {
-        initializeTransferNoteRecyclerView();
+        initializeTransferNoteRecyclerView(mId);
 
         binding.swipeRefreshLayout.setRefreshing(false);
     }
@@ -107,15 +136,10 @@ public class PalletTransferDetailActivity extends AppCompatActivity {
         startActivity(new Intent(this, activityClass));
     }
 
-    private void initializePalletTransferDetails() {
-        transferViewModel = new ViewModelProvider(this).get(TransferViewModel.class);
-        mPallet = getIntent().getParcelableExtra(GlobalVars.PALLET_TRANSFER_LIST);
-    }
-
-    private void initializeTransferNoteRecyclerView() {
+    private void initializeTransferNoteRecyclerView(int id) {
         updateViewState(ViewState.LOADING);
 
-        transferViewModel.getPalletTransferDetailLiveData(mPallet.getId()).observe(this, apiResponse -> {
+        transferViewModel.getPalletTransferDetailLiveData(id).observe(this, apiResponse -> {
             if (apiResponse.getData().getPalletTransfer().getTransferNotes().size() != 0) {
 
                 setupTransferNoteAdapter(apiResponse.getData().getPalletTransfer().getTransferNotes());
@@ -139,7 +163,7 @@ public class PalletTransferDetailActivity extends AppCompatActivity {
     }
 
     private void setupTransferNoteAdapter(List<TransferNote> transferNotes) {
-        mAdapter = new TransferNoteAdapter(this, transferNotes, mPallet.getPalletSerialNumber(), new TransferNoteAdapter.onItemClickListener() {
+        mAdapter = new TransferNoteAdapter(this, transferNotes, getPalletSerialNumber(), new TransferNoteAdapter.onItemClickListener() {
             @Override
             public void onClick(View view, int position, TransferNote transferNote) {
                 Intent intent = new Intent(PalletTransferDetailActivity.this, TransferNoteActivity.class);
@@ -203,7 +227,7 @@ public class PalletTransferDetailActivity extends AppCompatActivity {
 
     private void performCompletingAction() {
         // ...
-        transferViewModel.completePreparationLiveData(mPallet.getId()).observe(this, apiResponse -> {
+        transferViewModel.completePreparationLiveData(mId).observe(this, apiResponse -> {
             Toast.makeText(PalletTransferDetailActivity.this, apiResponse.getMessage(), Toast.LENGTH_SHORT).show();
             finish();
         });
