@@ -26,6 +26,8 @@ public class PalletTransfer implements Parcelable {
     private ArrayList<TransferNote> transferNotes;
     @SerializedName("color_hex")
     private String colorCode;
+    @SerializedName("rack_serial_number")
+    private String rackNo;
 
     public int getId() {
         return id;
@@ -67,6 +69,11 @@ public class PalletTransfer implements Parcelable {
         return colorCode;
     }
 
+    public String getRackNo() {
+        return rackNo;
+    }
+
+
     @Override
     public int describeContents() {
         return 0;
@@ -84,6 +91,7 @@ public class PalletTransfer implements Parcelable {
         dest.writeString(this.status);
         dest.writeTypedList(this.transferNotes);
         dest.writeString(this.colorCode);
+        dest.writeString(this.rackNo);
     }
 
     public void readFromParcel(Parcel source) {
@@ -97,6 +105,7 @@ public class PalletTransfer implements Parcelable {
         this.status = source.readString();
         this.transferNotes = source.createTypedArrayList(TransferNote.CREATOR);
         this.colorCode = source.readString();
+        this.rackNo = source.readString();
     }
 
     public PalletTransfer() {
@@ -113,6 +122,7 @@ public class PalletTransfer implements Parcelable {
         this.status = in.readString();
         this.transferNotes = in.createTypedArrayList(TransferNote.CREATOR);
         this.colorCode = in.readString();
+        this.rackNo = in.readString();
     }
 
     public static final Creator<PalletTransfer> CREATOR = new Creator<PalletTransfer>() {

@@ -101,4 +101,9 @@ public class TransferViewModel extends ViewModel {
         palletTransferResponseData = palletTransferRepository.getRackResponse(30, page, serialNo);
         return palletTransferResponseData;
     }
+
+    public LiveData<APIResponse> getPalletLoadData( String palletBarcode) {
+        palletTransferResponseData = palletTransferRepository.searchPalletLoadResponse(palletBarcode);
+        return palletTransferResponseData;
+    }
 }

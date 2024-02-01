@@ -1,5 +1,8 @@
 package com.app.ivansuhendra.packinggla.ui.load;
 
+import static android.app.Activity.RESULT_OK;
+import static com.app.ivansuhendra.packinggla.PalletLoadActivity.REQUEST_CODE;
+
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -18,6 +21,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.app.ivansuhendra.packinggla.PalletLoadActivity;
 import com.app.ivansuhendra.packinggla.R;
 import com.app.ivansuhendra.packinggla.ScanQrActivity;
 import com.app.ivansuhendra.packinggla.databinding.FragmentLoadBinding;
@@ -64,18 +68,11 @@ public class LoadFragment extends Fragment {
         mCodeScanner.setDecodeCallback(result -> {
             requireActivity().runOnUiThread(() -> {
                 String message = result.getText();
-                String partStr = message.substring(0, 4);
 
-                if ("PLT_CODE".equals(serialCode)) {
-                    // Code for PLT_CODE
-                } else if ("RECEIVE_CODE".equals(serialCode)) {
-                    // Code for RECEIVE_CODE
-                } else {
-                    Intent resultIntent = new Intent();
-                    resultIntent.putExtra("scannedResult", message);
-                    requireActivity().setResult(Activity.RESULT_OK, resultIntent);
-                    requireActivity().finish();
-                }
+// Start PalletLoadActivity and pass scanned code
+                Intent intent = new Intent(requireContext(), PalletLoadActivity.class);
+                intent.putExtra("scannedLoad", message);
+                startActivity(intent);
             });
         });
     }
