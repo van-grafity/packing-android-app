@@ -1,4 +1,4 @@
-package com.app.ivansuhendra.packinggla.ui.receive;
+package com.app.ivansuhendra.packinggla.ui.fragment.receive;
 
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -20,8 +20,8 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.app.ivansuhendra.packinggla.MainActivity;
-import com.app.ivansuhendra.packinggla.PalletReceiveDetailActivity;
-import com.app.ivansuhendra.packinggla.ScanQrActivity;
+import com.app.ivansuhendra.packinggla.ui.activity.PalletReceiveDetailActivity;
+import com.app.ivansuhendra.packinggla.ui.activity.ScanQrActivity;
 import com.app.ivansuhendra.packinggla.adapter.PalletTransferfAdapter;
 import com.app.ivansuhendra.packinggla.databinding.FragmentReceiveBinding;
 import com.app.ivansuhendra.packinggla.model.APIResponse;

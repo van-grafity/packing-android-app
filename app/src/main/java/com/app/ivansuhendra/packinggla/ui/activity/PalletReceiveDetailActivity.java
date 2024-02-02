@@ -1,8 +1,7 @@
-package com.app.ivansuhendra.packinggla;
+package com.app.ivansuhendra.packinggla.ui.activity;
 
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Editable;
@@ -23,6 +22,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.app.ivansuhendra.packinggla.R;
 import com.app.ivansuhendra.packinggla.adapter.RackAdapter;
 import com.app.ivansuhendra.packinggla.adapter.TransferNoteAdapter;
 import com.app.ivansuhendra.packinggla.databinding.ActivityPalletReceiveDetailBinding;

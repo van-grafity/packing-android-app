@@ -1,4 +1,4 @@
-package com.app.ivansuhendra.packinggla;
+package com.app.ivansuhendra.packinggla.ui.activity;
 
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
@@ -146,7 +146,8 @@ public class PalletTransferDetailActivity extends AppCompatActivity {
                 setupTransferNoteAdapter(apiResponse.getData().getPalletTransfer().getTransferNotes());
 
                 updateViewState(ViewState.DATA_AVAILABLE);
-                if (apiResponse.getData().getPalletTransfer().getStatus().equals("Preparation in Progress") && apiResponse.getData().getPalletTransfer().getTransferNotes().size() != 0){
+//                && apiResponse.getData().getPalletTransfer().getTransferNotes().size() != 0
+                if (apiResponse.getData().getPalletTransfer().getStatus().equals("Preparation in Progress")){
                     binding.btnCompleting.setVisibility(View.VISIBLE);
                 } else {
                     binding.btnCompleting.setVisibility(View.GONE);

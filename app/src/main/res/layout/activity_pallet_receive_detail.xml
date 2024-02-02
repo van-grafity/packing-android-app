@@ -6,7 +6,7 @@
     android:id="@+id/rl_null"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".PalletReceiveDetailActivity">
+    tools:context=".ui.activity.PalletReceiveDetailActivity">
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"

@@ -1,4 +1,4 @@
-package com.app.ivansuhendra.packinggla;
+package com.app.ivansuhendra.packinggla.ui.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -14,6 +14,8 @@ import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.app.ivansuhendra.packinggla.MainActivity;
+import com.app.ivansuhendra.packinggla.R;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.MultiplePermissionsReport;
 import com.karumi.dexter.PermissionToken;

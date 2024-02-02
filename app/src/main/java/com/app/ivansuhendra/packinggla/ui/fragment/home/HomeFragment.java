@@ -1,8 +1,5 @@
-package com.app.ivansuhendra.packinggla.ui.home;
+package com.app.ivansuhendra.packinggla.ui.fragment.home;
 
-import static android.content.Context.MODE_PRIVATE;
-
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,19 +8,12 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
-import com.app.ivansuhendra.packinggla.LoginActivity;
 import com.app.ivansuhendra.packinggla.R;
 import com.app.ivansuhendra.packinggla.databinding.FragmentHomeBinding;
-import com.app.ivansuhendra.packinggla.model.User;
 import com.app.ivansuhendra.packinggla.net.API;
-import com.app.ivansuhendra.packinggla.utils.GlobalVars;
-import com.app.ivansuhendra.packinggla.viewmodel.PalletTransferViewModel;
-
-import br.com.kots.mob.complex.preferences.ComplexPreferences;
 
 public class HomeFragment extends Fragment {
 

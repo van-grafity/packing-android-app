@@ -1,4 +1,4 @@
-package com.app.ivansuhendra.packinggla;
+package com.app.ivansuhendra.packinggla.ui.activity;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;

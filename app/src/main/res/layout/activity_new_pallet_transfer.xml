@@ -5,7 +5,7 @@
     android:id="@+id/rl_null"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".NewPalletTransferActivity">
+    tools:context=".ui.activity.NewPalletTransferActivity">
 
     <ProgressBar
         android:id="@+id/contentLoad"

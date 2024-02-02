@@ -1,13 +1,8 @@
-package com.app.ivansuhendra.packinggla.ui.load;
-
-import static android.app.Activity.RESULT_OK;
-import static com.app.ivansuhendra.packinggla.PalletLoadActivity.REQUEST_CODE;
+package com.app.ivansuhendra.packinggla.ui.fragment.load;
 
 import androidx.core.content.ContextCompat;
-import androidx.lifecycle.ViewModelProvider;
 
 import android.Manifest;
-import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -21,12 +16,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.app.ivansuhendra.packinggla.PalletLoadActivity;
-import com.app.ivansuhendra.packinggla.R;
-import com.app.ivansuhendra.packinggla.ScanQrActivity;
+import com.app.ivansuhendra.packinggla.ui.activity.PalletLoadActivity;
 import com.app.ivansuhendra.packinggla.databinding.FragmentLoadBinding;
 import com.app.ivansuhendra.packinggla.utils.GlobalVars;
-import com.app.ivansuhendra.packinggla.viewmodel.LoadViewModel;
 import com.budiyev.android.codescanner.CodeScanner;
 
 public class LoadFragment extends Fragment {

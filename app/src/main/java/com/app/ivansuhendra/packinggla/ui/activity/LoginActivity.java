@@ -1,4 +1,4 @@
-package com.app.ivansuhendra.packinggla;
+package com.app.ivansuhendra.packinggla.ui.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.LiveData;
@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Toast;
 
+import com.app.ivansuhendra.packinggla.MainActivity;
 import com.app.ivansuhendra.packinggla.databinding.ActivityLoginBinding;
 import com.app.ivansuhendra.packinggla.model.APIResponse;
 import com.app.ivansuhendra.packinggla.model.User;

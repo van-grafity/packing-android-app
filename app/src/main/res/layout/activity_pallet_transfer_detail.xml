@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".PalletTransferDetailActivity">
+    tools:context=".ui.activity.PalletTransferDetailActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -603,6 +603,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:backgroundTint="#39A48A"
+            android:visibility="gone"
             android:text="COMPLETING PREPARATION" />
     </LinearLayout>
 </RelativeLayout>

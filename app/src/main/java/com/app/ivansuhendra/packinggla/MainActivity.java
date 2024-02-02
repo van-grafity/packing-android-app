@@ -7,6 +7,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -21,10 +22,16 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.app.ivansuhendra.packinggla.databinding.ActivityMainBinding;
+import com.app.ivansuhendra.packinggla.model.User;
 import com.app.ivansuhendra.packinggla.net.API;
+import com.app.ivansuhendra.packinggla.ui.activity.LoginActivity;
+import com.app.ivansuhendra.packinggla.ui.activity.ScanQrActivity;
+import com.app.ivansuhendra.packinggla.utils.GlobalVars;
 import com.app.ivansuhendra.packinggla.viewmodel.SharedViewModel;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
+
+import br.com.kots.mob.complex.preferences.ComplexPreferences;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
@@ -33,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding binding;
     private NavController navController; // Global NavController variable
     private SharedViewModel sharedViewModel;
+    private User mUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,44 +68,14 @@ public class MainActivity extends AppCompatActivity {
 
         DrawerLayout drawer = binding.drawerLayout;
         NavigationView navigationView = binding.navView;
-        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                // Handle item selection manually
-                switch (item.getItemId()) {
-                    case R.id.nav_home:
-                        // Navigate to the home destination
-                        navController.navigate(R.id.nav_home);
-                        break;
-                    case R.id.nav_transfer:
-                        // Navigate to the transfer destination
-                        navController.navigate(R.id.nav_transfer);
-                        break;
-                    case R.id.nav_receive:
-                        // Navigate to the receive destination
-                        navController.navigate(R.id.nav_receive);
-                        break;
-                    case R.id.nav_load:
-                        // Navigate to the load destination
-                        navController.navigate(R.id.nav_load);
-                        break;
-                    case R.id.nav_logout:
-                        // Navigate to the logout destination
-                        navController.navigate(R.id.nav_logout);
-                        break;
-                }
 
-                // Close the drawer
-                drawer.closeDrawer(GravityCompat.START);
-                return true;
-            }
-        });
-
-        if (API.currentUser(MainActivity.this) == null) {
+        ComplexPreferences complexPreferences = ComplexPreferences.getComplexPreferences(this, GlobalVars.PREF_USER, MODE_PRIVATE);
+        mUser = complexPreferences.getObject(GlobalVars.PREF_USER_KEY, User.class);
+        if (mUser == null || mUser.getName() == null) {
             startActivity(new Intent(getBaseContext(), LoginActivity.class));
             finish();
             return;
-        } else {
+        }  else {
             View headerView = navigationView.getHeaderView(0);
             TextView tvName = headerView.findViewById(R.id.tvName);
             TextView tvEmail = headerView.findViewById(R.id.tvEmail);
@@ -119,6 +97,26 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
 
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                int id = item.getItemId();
+                if (id == R.id.nav_home) {
+                    navController.navigate(R.id.nav_home);
+                    drawer.closeDrawer(GravityCompat.START);
+                    return true;
+                } else if (id == R.id.nav_logout) {
+                    showLogoutDialog();
+                    return true;
+                } else {
+                    // Navigate to other destinations
+                    NavigationUI.onNavDestinationSelected(item, navController);
+                    drawer.closeDrawer(GravityCompat.START);
+                    return true;
+                }
+            }
+        });
+
         sharedViewModel = new ViewModelProvider(this).get(SharedViewModel.class);
 
         // Observe the flag to navigate to the transfer destination
@@ -135,6 +133,33 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    private void showLogoutDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("Are you sure you want to log out?")
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        // Perform logout actions here
+                        // For example, navigate to login screen or clear session
+                        // For now, let's just close the app
+                        ComplexPreferences complexPrefenreces = ComplexPreferences.getComplexPreferences(MainActivity.this, GlobalVars.PREF_USER, MODE_PRIVATE);
+                        complexPrefenreces.putObject(GlobalVars.PREF_USER_KEY, new User());
+                        complexPrefenreces.commit();
+
+                        startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                        finish();
+                    }
+                })
+                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                    }
+                });
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 
     @Override
@@ -162,16 +187,7 @@ public class MainActivity extends AppCompatActivity {
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            new AlertDialog.Builder(this)
-                    .setMessage("Apakah Anda yakin ingin keluar?")
-                    .setPositiveButton("Ya", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            MainActivity.super.onBackPressed();
-                        }
-                    })
-                    .setNegativeButton("Tidak", null)
-                    .show();
+            MainActivity.super.onBackPressed();
         }
     }
 }

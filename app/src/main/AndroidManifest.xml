@@ -22,25 +22,25 @@
         android:theme="@style/Theme.PackingGLA"
         android:usesCleartextTraffic="${usesCleartextTraffic}">
         <activity
-            android:name=".PalletLoadActivity"
+            android:name=".ui.activity.PalletLoadActivity"
             android:exported="false" />
         <activity
-            android:name=".LoginActivity"
+            android:name=".ui.activity.LoginActivity"
             android:exported="false" />
         <activity
-            android:name=".PalletReceiveDetailActivity"
+            android:name=".ui.activity.PalletReceiveDetailActivity"
             android:exported="false" />
         <activity
-            android:name=".TransferNoteActivity"
+            android:name=".ui.activity.TransferNoteActivity"
             android:exported="false" />
         <activity
-            android:name=".NewTransferNoteActivity"
+            android:name=".ui.activity.NewTransferNoteActivity"
             android:exported="false" />
         <activity
-            android:name=".NewPalletTransferActivity"
+            android:name=".ui.activity.NewPalletTransferActivity"
             android:exported="false" />
         <activity
-            android:name=".PalletTransferDetailActivity"
+            android:name=".ui.activity.PalletTransferDetailActivity"
             android:exported="true">
             <intent-filter android:autoVerify="true">
                 <action android:name="android.intent.action.VIEW" />
@@ -57,11 +57,11 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".SplashActivity"
+            android:name=".ui.activity.SplashActivity"
             android:exported="false"
             android:theme="@style/SplashTheme" />
         <activity
-            android:name=".ScanQrActivity"
+            android:name=".ui.activity.ScanQrActivity"
             android:exported="false" />
         <activity
             android:name=".MainActivity"

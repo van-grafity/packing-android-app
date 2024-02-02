@@ -7,9 +7,14 @@
 
     <fragment
         android:id="@+id/nav_home"
-        android:name="com.app.ivansuhendra.packinggla.ui.home.HomeFragment"
+        android:name="com.app.ivansuhendra.packinggla.ui.fragment.home.HomeFragment"
         android:label="@string/menu_home"
         tools:layout="@layout/fragment_home">
+
+        <action
+            android:id="@+id/action_nav_home_to_homeFragment"
+            app:destination="@id/nav_home"/>
+
         <action
             android:id="@+id/action_nav_home_to_transferFragment"
             app:destination="@id/nav_transfer"/>
@@ -25,19 +30,19 @@
 
     <fragment
         android:id="@+id/nav_transfer"
-        android:name="com.app.ivansuhendra.packinggla.ui.transfer.TransferFragment"
+        android:name="com.app.ivansuhendra.packinggla.ui.fragment.transfer.TransferFragment"
         android:label="@string/menu_transfer"
         tools:layout="@layout/fragment_transfer" />
 
     <fragment
         android:id="@+id/nav_receive"
-        android:name="com.app.ivansuhendra.packinggla.ui.receive.ReceiveFragment"
+        android:name="com.app.ivansuhendra.packinggla.ui.fragment.receive.ReceiveFragment"
         android:label="@string/menu_receive"
         tools:layout="@layout/fragment_receive" />
 
     <fragment
         android:id="@+id/nav_load"
-        android:name="com.app.ivansuhendra.packinggla.ui.load.LoadFragment"
+        android:name="com.app.ivansuhendra.packinggla.ui.fragment.load.LoadFragment"
         android:label="@string/menu_load"
         tools:layout="@layout/fragment_load" />
 </navigation>

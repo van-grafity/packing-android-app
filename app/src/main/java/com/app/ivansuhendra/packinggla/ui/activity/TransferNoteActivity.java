@@ -1,4 +1,4 @@
-package com.app.ivansuhendra.packinggla;
+package com.app.ivansuhendra.packinggla.ui.activity;
 
 import android.app.ProgressDialog;
 import android.content.ContentValues;

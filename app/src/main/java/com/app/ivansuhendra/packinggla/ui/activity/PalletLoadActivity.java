@@ -1,4 +1,4 @@
-package com.app.ivansuhendra.packinggla;
+package com.app.ivansuhendra.packinggla.ui.activity;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -16,7 +16,6 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.app.ivansuhendra.packinggla.adapter.PalletLoadAdapter;
-import com.app.ivansuhendra.packinggla.adapter.TransferNoteAdapter;
 import com.app.ivansuhendra.packinggla.databinding.ActivityPalletLoadBinding;
 import com.app.ivansuhendra.packinggla.model.APIResponse;
 import com.app.ivansuhendra.packinggla.model.TransferNote;

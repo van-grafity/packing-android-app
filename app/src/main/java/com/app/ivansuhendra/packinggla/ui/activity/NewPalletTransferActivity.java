@@ -1,4 +1,4 @@
-package com.app.ivansuhendra.packinggla;
+package com.app.ivansuhendra.packinggla.ui.activity;
 
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
@@ -8,7 +8,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -17,6 +16,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
+import com.app.ivansuhendra.packinggla.R;
 import com.app.ivansuhendra.packinggla.databinding.ActivityNewPalletTransferBinding;
 import com.app.ivansuhendra.packinggla.model.APIResponse;
 import com.app.ivansuhendra.packinggla.model.Location;

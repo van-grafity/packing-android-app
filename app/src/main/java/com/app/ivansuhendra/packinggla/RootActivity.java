@@ -5,6 +5,8 @@ import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.app.ivansuhendra.packinggla.ui.activity.SplashActivity;
+
 public class RootActivity extends AppCompatActivity {
 
     @Override
