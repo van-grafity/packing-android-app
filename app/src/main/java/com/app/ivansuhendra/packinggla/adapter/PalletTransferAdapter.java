@@ -20,7 +20,6 @@ import com.app.ivansuhendra.packinggla.utils.GlobalVars;
 
 import org.w3c.dom.Text;
 
-// using pagination
 public class PalletTransferAdapter extends PagedListAdapter<PalletTransfer, PalletTransferAdapter.PalletTransferViewHolder> {
 
     private final Context mContext;

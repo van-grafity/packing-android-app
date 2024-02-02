@@ -56,7 +56,7 @@ public class CartonAdapter extends RecyclerView.Adapter<CartonAdapter.CartonView
         holder.tvPo.setText(model.getPoNo());
         holder.tvGl.setText(model.getGlNo());
         holder.tvContent.setText(model.getContent());
-        holder.tvQty.setText(model.getPcs());
+        holder.tvQty.setText(String.valueOf(model.getPcs()));
 
         holder.btnItemView.setOnClickListener(new View.OnClickListener() {
             @Override

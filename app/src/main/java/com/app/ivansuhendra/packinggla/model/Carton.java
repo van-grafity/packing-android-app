@@ -24,7 +24,7 @@ public class Carton {
     private String season;
     private String content;
     @SerializedName("total_pcs")
-    private String pcs;
+    private int pcs;
 
     public int getId() {
         return id;
@@ -62,7 +62,7 @@ public class Carton {
         return content;
     }
 
-    public String getPcs() {
+    public int getPcs() {
         return pcs;
     }
 
@@ -118,7 +118,7 @@ public class Carton {
         this.content = content;
     }
 
-    public void setPcs(String pcs) {
+    public void setPcs(int pcs) {
         this.pcs = pcs;
     }
 }

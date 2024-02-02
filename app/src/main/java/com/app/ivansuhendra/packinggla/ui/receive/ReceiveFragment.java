@@ -55,7 +55,6 @@ public class ReceiveFragment extends Fragment {
         View root = binding.getRoot();
 
         if (!isNetworkAvailable()) {
-            // Tampilkan Snackbar dengan aksi refresh jika tidak ada koneksi
             showNoNetworkMessage();
         } else {
             getActivity().runOnUiThread(new Runnable() {
@@ -74,7 +73,6 @@ public class ReceiveFragment extends Fragment {
                 }
             });
 
-
             transferViewModel = new ViewModelProvider(this).get(TransferViewModel.class);
 
             loadDataTransferList();
@@ -88,17 +86,14 @@ public class ReceiveFragment extends Fragment {
     }
 
     private void showNoNetworkMessage() {
-        // Tambahkan logika untuk menampilkan pesan atau ambil tindakan yang sesuai
         snackbar = Snackbar.make(getActivity().findViewById(android.R.id.content), "Tidak ada koneksi internet. Coba lagi?", Snackbar.LENGTH_INDEFINITE);
         snackbar.setAction("Reload", new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         if (isNetworkAvailable()) {
-                            // Koneksi aktif, lakukan reload data
                             setupRecyclerView();
                             loadDataTransferList();
                         } else {
-                            // Koneksi masih tidak aktif, tampilkan pesan atau ambil tindakan lain
                             showNoNetworkMessage();
                         }
                     }

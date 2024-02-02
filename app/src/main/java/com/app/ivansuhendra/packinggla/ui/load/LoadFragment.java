@@ -69,7 +69,6 @@ public class LoadFragment extends Fragment {
             requireActivity().runOnUiThread(() -> {
                 String message = result.getText();
 
-// Start PalletLoadActivity and pass scanned code
                 Intent intent = new Intent(requireContext(), PalletLoadActivity.class);
                 intent.putExtra("scannedLoad", message);
                 startActivity(intent);

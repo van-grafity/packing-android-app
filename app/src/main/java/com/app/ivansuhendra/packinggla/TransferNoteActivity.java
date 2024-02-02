@@ -377,7 +377,7 @@ public class TransferNoteActivity extends AppCompatActivity {
                     carton.setBuyer(cursor.getString(7));
                     carton.setSeason(cursor.getString(8));
                     carton.setContent(cursor.getString(9));
-                    carton.setPcs(cursor.getString(10));
+                    carton.setPcs(cursor.getInt(10));
                     carton.setPacked(cursor.getString(11));
                     cartonArrayList.add(carton);
                 } while (cursor.moveToNext());

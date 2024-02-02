@@ -168,6 +168,22 @@ public class PalletTransferRepository {
         return mutableLiveData;
     }
 
+    public LiveData<APIResponse> postPalletLoadResponse(Integer[] transferNoteIds) {
+        final MutableLiveData<APIResponse> mutableLiveData = new MutableLiveData<>();
+        API.service().postPalletLoad(transferNoteIds).enqueue(new Callback<APIResponse>() {
+            @Override
+            public void onResponse(Call<APIResponse> call, Response<APIResponse> response) {
+                mutableLiveData.setValue(response.body());
+            }
+
+            @Override
+            public void onFailure(Call<APIResponse> call, Throwable t) {
+
+            }
+        });
+        return mutableLiveData;
+    }
+
     public LiveData<APIResponse> updateTransferNoteResponse(int palletTransferId, int transferNoteId, Integer[] barcodeIds) {
         final MutableLiveData<APIResponse> mutableLiveData = new MutableLiveData<>();
         API.service().updateTransferNote(palletTransferId, transferNoteId, barcodeIds).enqueue(new APICallback<APIResponse>(mContext) {

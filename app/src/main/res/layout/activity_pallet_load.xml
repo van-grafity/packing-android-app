@@ -101,7 +101,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center"
-                        android:text="Ready to Transfer"
                         android:textAppearance="@style/TextAppearance.Bold10"
                         android:textColor="@color/white"
                         android:textStyle="bold" />
@@ -241,7 +240,7 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_transfer_note"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:visibility="visible" />
 
             <androidx.legacy.widget.Space
