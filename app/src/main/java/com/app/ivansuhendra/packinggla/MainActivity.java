@@ -66,6 +66,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        binding.tvVersion.setText("VERSION : " + BuildConfig.VERSION_NAME);
+
         DrawerLayout drawer = binding.drawerLayout;
         NavigationView navigationView = binding.navView;
 

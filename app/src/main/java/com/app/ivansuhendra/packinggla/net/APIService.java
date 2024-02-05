@@ -50,7 +50,7 @@ public interface APIService {
 
     @FormUrlEncoded
     @POST("pallet-transfer/" + "transfer-note-store")
-    Call<APIResponse> newTransferNote(@Field("pallet_transfer_id") int palletTransferId, @Field("carton_barcode_id[]") Integer[] barcodeIds);
+    Call<APIResponse> newTransferNote(@Field("pallet_transfer_id") int palletTransferId, @Field("carton_barcode_id[]") Integer[] barcodeIds, @Field("issued_by") String issue, @Field("created_by") int userId);
 
     @GET("pallet-transfer/" + "search-carton")
     Call<APIResponse> searchCarton(@Query("carton_barcode") String barcode);
@@ -63,7 +63,7 @@ public interface APIService {
     Call<APIResponse> getLocation();
 
     @GET("rack")
-    Call<APIResponse> getRack(@Query("limit") int limit, @Query("page") int page, @Query("serial_number") String serialNo);
+    Call<APIResponse> getRack(@Query("limit") int limit, @Query("page") int page, @Query("serial_number") String serialNo, @Query("flag_empty") String isEmpty);
 
     @GET("pallet-loading/" + "search-pallet")
     Call<APIResponse> searchPalletLoad(@Query("pallet_barcode") String palletBarcode);

@@ -63,6 +63,15 @@ public class TransferNoteActivity extends AppCompatActivity {
             binding.btnEditTransferNote.setText("Edit Transfer Note");
             binding.tvTransferNoteSerial.setText(transferNote.getSerialNumber());
         }
+
+        if (palletTransfer.getStatus().equals("Preparation in Progress")) {
+            binding.btnEditTransferNote.setEnabled(true);
+            binding.btnAddCarton.setEnabled(true);
+        } else {
+            binding.btnEditTransferNote.setEnabled(false);
+            binding.btnAddCarton.setEnabled(false);
+        }
+
         binding.tvFrom.setText(palletTransfer.getLocationFrom());
         binding.tvPalletNo.setText(palletTransfer.getPalletSerialNumber());
         binding.tvTotalCarton.setText(palletTransfer.getTotalCarton());
@@ -122,6 +131,9 @@ public class TransferNoteActivity extends AppCompatActivity {
         binding.btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Intent intent = new Intent(TransferNoteActivity.this, PalletTransferDetailActivity.class);
+                intent.putExtra(GlobalVars.PALLET_TRANSFER_LIST, palletTransfer);
+                startActivity(intent);
                 finish();
             }
         });

@@ -47,6 +47,7 @@ public class TransferNoteAdapter extends RecyclerView.Adapter<TransferNoteAdapte
         holder.tvPalletNo.setText(mPalletNo == null ? "-" : mPalletNo);
         holder.tvTotalCarton.setText(String.valueOf(model.getTotalCarton() == null ? "-" : model.getTotalCarton()));
         holder.tvIssuedBy.setText(model.getIssuedBy() == null ? "-" : model.getIssuedBy());
+        holder.tvPcs.setText(String.valueOf(model.getPcs() == 0 ? "-" : model.getPcs()));
 
         holder.btnItemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -74,6 +75,7 @@ public class TransferNoteAdapter extends RecyclerView.Adapter<TransferNoteAdapte
         TextView tvPalletNo;
         TextView tvTotalCarton;
         TextView tvIssuedBy;
+        TextView tvPcs;
 
         public TransferViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -83,6 +85,7 @@ public class TransferNoteAdapter extends RecyclerView.Adapter<TransferNoteAdapte
             tvPalletNo = itemView.findViewById(R.id.tv_pallet_no);
             tvTotalCarton = itemView.findViewById(R.id.tv_total_carton);
             tvIssuedBy = itemView.findViewById(R.id.tv_issued_by);
+            tvPcs = itemView.findViewById(R.id.tv_total_pcs);
         }
     }
 }

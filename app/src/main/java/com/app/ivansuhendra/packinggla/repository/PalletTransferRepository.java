@@ -136,9 +136,9 @@ public class PalletTransferRepository {
         return mutableLiveData;
     }
 
-    public LiveData<APIResponse> getRackResponse(int limit, int page, String serialNo) {
+    public LiveData<APIResponse> getRackResponse(int limit, int page, String serialNo, String isEmpty) {
         final MutableLiveData<APIResponse> mutableLiveData = new MutableLiveData<>();
-        API.service().getRack(limit, page, serialNo).enqueue(new Callback<APIResponse>() {
+        API.service().getRack(limit, page, serialNo, isEmpty).enqueue(new Callback<APIResponse>() {
             @Override
             public void onResponse(Call<APIResponse> call, Response<APIResponse> response) {
                 mutableLiveData.setValue(response.body());
@@ -237,7 +237,7 @@ public class PalletTransferRepository {
 
     public LiveData<APIResponse> newTransferNoteResponse(int palletTransferId, Integer[] barcodeIds) {
         final MutableLiveData<APIResponse> mutableLiveData = new MutableLiveData<>();
-        API.service().newTransferNote(palletTransferId, barcodeIds).enqueue(new APICallback<APIResponse>(mContext) {
+        API.service().newTransferNote(palletTransferId, barcodeIds, API.currentUser(mContext).getName(), API.currentUser(mContext).getId()).enqueue(new APICallback<APIResponse>(mContext) {
             @Override
             protected void onSuccess(APIResponse apiResponse) {
                 mutableLiveData.setValue(apiResponse);

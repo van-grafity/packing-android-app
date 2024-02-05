@@ -25,6 +25,8 @@ public class TransferNote implements Parcelable {
     private String createAt;
     @SerializedName("cartons")
     private ArrayList<Carton> carton;
+    @SerializedName("total_pcs")
+    private int pcs;
 
     public int getId() {
         return id;
@@ -62,6 +64,10 @@ public class TransferNote implements Parcelable {
         return carton;
     }
 
+    public int getPcs() {
+        return pcs;
+    }
+
 
     @Override
     public int describeContents() {
@@ -79,6 +85,7 @@ public class TransferNote implements Parcelable {
         dest.writeString(this.receiveAt);
         dest.writeString(this.createAt);
         dest.writeList(this.carton);
+        dest.writeInt(this.pcs);
     }
 
     public void readFromParcel(Parcel source) {
@@ -92,6 +99,7 @@ public class TransferNote implements Parcelable {
         this.createAt = source.readString();
         this.carton = new ArrayList<Carton>();
         source.readList(this.carton, Carton.class.getClassLoader());
+        this.pcs = source.readInt();
     }
 
     public TransferNote() {
@@ -108,6 +116,7 @@ public class TransferNote implements Parcelable {
         this.createAt = in.readString();
         this.carton = new ArrayList<Carton>();
         in.readList(this.carton, Carton.class.getClassLoader());
+        this.pcs = in.readInt();
     }
 
     public static final Creator<TransferNote> CREATOR = new Creator<TransferNote>() {

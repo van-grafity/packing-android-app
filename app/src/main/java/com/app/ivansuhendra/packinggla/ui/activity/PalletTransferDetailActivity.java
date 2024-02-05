@@ -141,6 +141,12 @@ public class PalletTransferDetailActivity extends AppCompatActivity {
         updateViewState(ViewState.LOADING);
 
         transferViewModel.getPalletTransferDetailLiveData(id).observe(this, apiResponse -> {
+            if (apiResponse.getData().getPalletTransfer().getStatus().equals("Preparation in Progress")){
+                binding.btnNewTransferNote.setVisibility(View.VISIBLE);
+            } else {
+                binding.btnNewTransferNote.setVisibility(View.GONE);
+            }
+
             if (apiResponse.getData().getPalletTransfer().getTransferNotes().size() != 0) {
 
                 setupTransferNoteAdapter(apiResponse.getData().getPalletTransfer().getTransferNotes());

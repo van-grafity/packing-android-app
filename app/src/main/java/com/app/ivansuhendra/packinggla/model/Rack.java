@@ -11,6 +11,8 @@ public class Rack {
     private String description;
     private String area;
     private String level;
+    @SerializedName("flag_empty")
+    private String isEmpty;
 
     public Rack(int id, String name) {
         this.id = id;
@@ -31,6 +33,14 @@ public class Rack {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getIsEmpty() {
+        return isEmpty;
+    }
+
+    public void setIsEmpty(String isEmpty) {
+        this.isEmpty = isEmpty;
     }
 
     @NonNull

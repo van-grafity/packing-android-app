@@ -182,7 +182,7 @@ public class PalletReceiveDetailActivity extends AppCompatActivity implements Ad
 
     private void loadDataRackFromServer(String serialNo) {
         progressDialog.show();
-        transferViewModel.getRackLiveData(currentPage, serialNo).observe(PalletReceiveDetailActivity.this, new Observer<APIResponse>() {
+        transferViewModel.getRackLiveData(currentPage, serialNo, "Y").observe(PalletReceiveDetailActivity.this, new Observer<APIResponse>() {
             @Override
             public void onChanged(APIResponse apiResponse) {
                 if (apiResponse != null) {

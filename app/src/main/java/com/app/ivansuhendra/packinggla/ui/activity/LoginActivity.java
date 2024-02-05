@@ -54,6 +54,7 @@ public class LoginActivity extends AppCompatActivity {
                         // Check if the APIResponse indicates a successful login
                         if (apiResponse != null && apiResponse.getStatus().equals("success")) {
                             User user = new User();
+                            user.setId(apiResponse.getData().getUser().getId());
                             user.setName(apiResponse.getData().getUser().getName());
                             user.setEmail(email);
                             user.setPassword(password);
