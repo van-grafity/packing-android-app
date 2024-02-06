@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
@@ -20,11 +21,18 @@ public class CartonAdapter extends RecyclerView.Adapter<CartonAdapter.CartonView
     private List<Carton> mItems;
     private Context mContext;
     private CartonAdapter.onItemClickListener mClicked;
+    private boolean isClickable;
 
     public CartonAdapter(Context mContext, List<Carton> mItems, CartonAdapter.onItemClickListener clicked) {
         this.mContext = mContext;
         this.mItems = mItems;
         this.mClicked = clicked;
+        this.isClickable = false; // Atur ke false secara default
+    }
+
+    public void setClickable(boolean clickable) {
+        this.isClickable = clickable;
+        notifyDataSetChanged(); // Perbarui tampilan setelah perubahan status
     }
 
     public void setData(ArrayList<Carton> carton) {
@@ -58,10 +66,17 @@ public class CartonAdapter extends RecyclerView.Adapter<CartonAdapter.CartonView
         holder.tvContent.setText(model.getContent());
         holder.tvQty.setText(String.valueOf(model.getPcs()));
 
+//        holder.btnItemView.setEnabled(isClickable); // Atur keadaan klik berdasarkan status
+
         holder.btnItemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mClicked.onClick(v, holder.getAdapterPosition(), model);
+                if (isClickable) {
+                    mClicked.onClick(v, holder.getAdapterPosition(), model);
+                } else {
+                    // Tindakan jika tidak dapat diklik (opsional)
+                    Toast.makeText(mContext, "Carton sudah berada di dalam transfer note", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 

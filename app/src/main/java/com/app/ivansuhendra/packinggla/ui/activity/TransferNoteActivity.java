@@ -44,6 +44,7 @@ public class TransferNoteActivity extends AppCompatActivity {
     private CartonAdapter mAdapter;
     private ProgressDialog progressDialog;
     private ArrayList<Carton> mDataList = new ArrayList<>();
+    private boolean isCartonClickable = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,9 +68,11 @@ public class TransferNoteActivity extends AppCompatActivity {
         if (palletTransfer.getStatus().equals("Preparation in Progress")) {
             binding.btnEditTransferNote.setEnabled(true);
             binding.btnAddCarton.setEnabled(true);
+            isCartonClickable = true;
         } else {
             binding.btnEditTransferNote.setEnabled(false);
             binding.btnAddCarton.setEnabled(false);
+            isCartonClickable = false;
         }
 
         binding.tvFrom.setText(palletTransfer.getLocationFrom());
@@ -236,6 +239,7 @@ public class TransferNoteActivity extends AppCompatActivity {
                     }
                     // Update the adapter data and notify the changes
                     mAdapter.setData(mDataList);
+                    mAdapter.setClickable(isCartonClickable);
                     mAdapter.notifyDataSetChanged();
 
                     if (progressDialog != null && progressDialog.isShowing()) {
