@@ -77,10 +77,6 @@ public class PalletReceiveDetailActivity extends AppCompatActivity implements Ad
         binding = ActivityPalletReceiveDetailBinding.inflate(LayoutInflater.from(this));
         setContentView(binding.getRoot());
 
-        progressDialog = GlobalVars.pgDialog(PalletReceiveDetailActivity.this);
-        transferViewModel = new ViewModelProvider(this).get(TransferViewModel.class);
-        binding.spRack.setOnItemSelectedListener(this);
-
         if (savedInstanceState == null) {
             Bundle extras = getIntent().getExtras();
             mSn = (extras != null) ? extras.getString("sn", "") : "";
@@ -88,7 +84,11 @@ public class PalletReceiveDetailActivity extends AppCompatActivity implements Ad
             mSn = savedInstanceState.getString("STRING_I_NEED", "");
         }
 
-        initViews();
+        progressDialog = GlobalVars.pgDialog(PalletReceiveDetailActivity.this);
+        transferViewModel = new ViewModelProvider(this).get(TransferViewModel.class);
+        binding.spRack.setOnItemSelectedListener(this);
+        binding.rvTransferNote.setLayoutManager(new GridLayoutManager(this, 1, LinearLayoutManager.VERTICAL, false));
+
         initData();
 
         binding.btnSendPallet.setOnClickListener(new View.OnClickListener() {
@@ -225,10 +225,6 @@ public class PalletReceiveDetailActivity extends AppCompatActivity implements Ad
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
 
-    }
-
-    private void initViews() {
-        binding.rvTransferNote.setLayoutManager(new GridLayoutManager(this, 1, LinearLayoutManager.VERTICAL, false));
     }
 
     private void initData() {
