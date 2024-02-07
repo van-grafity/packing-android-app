@@ -79,6 +79,13 @@ public class PalletLoadActivity extends AppCompatActivity {
                 }
             }
         });
+
+        binding.btnBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
     }
 
     private void handleScannedResult(String scannedResult) {

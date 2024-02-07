@@ -67,7 +67,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="PTRF-2311-004"
-                    android:textAppearance="@style/TextAppearance.Bold16"
+                    android:textSize="20sp"
                     android:textColor="@color/colorPrimary"
                     android:textStyle="bold" />
 
@@ -130,7 +130,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:maxLines="3"
-                        android:text="Pallet From Factory :  "
+                        android:text="Factory :  "
                         android:textAppearance="@style/TextAppearance.Regular12" />
 
                     <TextView

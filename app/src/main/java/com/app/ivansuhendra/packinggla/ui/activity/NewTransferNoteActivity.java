@@ -90,7 +90,7 @@ public class NewTransferNoteActivity extends AppCompatActivity {
                         alertDialogBuilder
                                 .setMessage(apiResponse.getMessage())
                                 .setCancelable(false)
-                                .setNeutralButton("Ok", new DialogInterface.OnClickListener() {
+                                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int id) {
                                     }
                                 });

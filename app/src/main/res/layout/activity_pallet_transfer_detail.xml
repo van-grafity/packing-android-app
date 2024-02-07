@@ -191,7 +191,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:maxLines="3"
-                                android:text="Pallet From Factory :  "
+                                android:text="Pallet From :  "
                                 android:textAppearance="@style/TextAppearance.Regular14" />
 
                             <TextView

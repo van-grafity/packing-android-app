@@ -233,6 +233,11 @@ public class PalletTransferDetailActivity extends AppCompatActivity {
         alertDialog.show();
     }
 
+    @Override
+    public void onBackPressed() {
+        return;
+    }
+
     private void performCompletingAction() {
         // ...
         transferViewModel.completePreparationLiveData(mId).observe(this, apiResponse -> {

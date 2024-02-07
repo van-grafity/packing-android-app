@@ -67,19 +67,19 @@ public class CartonAdapter extends RecyclerView.Adapter<CartonAdapter.CartonView
         holder.tvQty.setText(String.valueOf(model.getPcs()));
 
 //        holder.btnItemView.setEnabled(isClickable); // Atur keadaan klik berdasarkan status
+        if (isClickable) {
+            holder.btnItemView.setVisibility(View.VISIBLE);
+        } else {
+            // Tindakan jika tidak dapat diklik (opsional)
+            holder.btnItemView.setVisibility(View.GONE);
+        }
 
         holder.btnItemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (isClickable) {
-                    mClicked.onClick(v, holder.getAdapterPosition(), model);
-                } else {
-                    // Tindakan jika tidak dapat diklik (opsional)
-                    Toast.makeText(mContext, "Carton sudah berada di dalam transfer note", Toast.LENGTH_SHORT).show();
-                }
+                mClicked.onClick(v, holder.getAdapterPosition(), model);
             }
         });
-
     }
 
     public void removeItem(int position) {

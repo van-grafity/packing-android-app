@@ -203,7 +203,7 @@ public class PalletTransferRepository {
 
     public LiveData<APIResponse>createPalletReceiveResponse(int palletTransferId, int rack, String receivedBy, String palletBarcode) {
         final MutableLiveData<APIResponse> mutableLiveData = new MutableLiveData<>();
-        API.service().createPalletReceive(palletTransferId, rack, receivedBy, palletBarcode).enqueue(new APICallback<APIResponse>(mContext) {
+        API.service().createPalletReceive(palletTransferId, rack, receivedBy, palletBarcode, API.currentUser(mContext).getId()).enqueue(new APICallback<APIResponse>(mContext) {
             @Override
             protected void onSuccess(APIResponse apiResponse) {
                 mutableLiveData.setValue(apiResponse);

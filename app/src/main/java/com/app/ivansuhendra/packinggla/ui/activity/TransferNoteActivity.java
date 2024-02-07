@@ -57,21 +57,21 @@ public class TransferNoteActivity extends AppCompatActivity {
 
         if (transferNote == null) {
             binding.tvTitle.setText("New Transfer Note");
-            binding.btnEditTransferNote.setText("New Transfer Note");
+            binding.btnEditTransferNote.setText("Save");
             binding.tvTransferNoteSerial.setText("No.-");
         } else {
             binding.tvTitle.setText("Edit Transfer Note");
-            binding.btnEditTransferNote.setText("Edit Transfer Note");
+            binding.btnEditTransferNote.setText("Save");
             binding.tvTransferNoteSerial.setText(transferNote.getSerialNumber());
         }
 
         if (palletTransfer.getStatus().equals("Preparation in Progress")) {
-            binding.btnEditTransferNote.setEnabled(true);
-            binding.btnAddCarton.setEnabled(true);
+            binding.btnEditTransferNote.setVisibility(View.VISIBLE);
+            binding.btnAddCarton.setVisibility(View.VISIBLE);
             isCartonClickable = true;
         } else {
-            binding.btnEditTransferNote.setEnabled(false);
-            binding.btnAddCarton.setEnabled(false);
+            binding.btnEditTransferNote.setVisibility(View.GONE);
+            binding.btnAddCarton.setVisibility(View.GONE);
             isCartonClickable = false;
         }
 
@@ -134,6 +134,21 @@ public class TransferNoteActivity extends AppCompatActivity {
         binding.btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+//                AlertDialog.Builder builder = new AlertDialog.Builder(TransferNoteActivity.this);
+//                builder.setMessage("Are you sure you want to cancel the changes?");
+//                builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialog, int which) {
+//                        Intent intent = new Intent(TransferNoteActivity.this, PalletTransferDetailActivity.class);
+//                        intent.putExtra(GlobalVars.PALLET_TRANSFER_LIST, palletTransfer);
+//                        startActivity(intent);
+//                        finish();
+//                        dialog.dismiss();
+//                    }
+//                });
+//                builder.setNegativeButton("NO", null);
+//                AlertDialog alertDialog = builder.create();
+//                alertDialog.show();
                 Intent intent = new Intent(TransferNoteActivity.this, PalletTransferDetailActivity.class);
                 intent.putExtra(GlobalVars.PALLET_TRANSFER_LIST, palletTransfer);
                 startActivity(intent);
@@ -186,7 +201,7 @@ public class TransferNoteActivity extends AppCompatActivity {
                         alertDialogBuilder
                                 .setMessage(apiResponse.getMessage())
                                 .setCancelable(false)
-                                .setNeutralButton("Ok", new DialogInterface.OnClickListener() {
+                                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int id) {
                                     }
                                 });
@@ -312,22 +327,22 @@ public class TransferNoteActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(TransferNoteActivity.this);
-        builder.setTitle("Konfirmasi");
-        builder.setMessage("Apakah Anda yakin ingin membatalkan perubahan?");
-        builder.setPositiveButton("Ya", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                Intent intent = new Intent(TransferNoteActivity.this, PalletTransferDetailActivity.class);
-                intent.putExtra(GlobalVars.PALLET_TRANSFER_LIST, palletTransfer);
-                startActivity(intent);
-                finish();
-                dialog.dismiss();
-            }
-        });
-        builder.setNegativeButton("Tidak", null);
-        AlertDialog alertDialog = builder.create();
-        alertDialog.show();
+//        AlertDialog.Builder builder = new AlertDialog.Builder(TransferNoteActivity.this);
+//        builder.setMessage("Are you sure you want to cancel the changes?");
+//        builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+//            @Override
+//            public void onClick(DialogInterface dialog, int which) {
+//                Intent intent = new Intent(TransferNoteActivity.this, PalletTransferDetailActivity.class);
+//                intent.putExtra(GlobalVars.PALLET_TRANSFER_LIST, palletTransfer);
+//                startActivity(intent);
+//                finish();
+//                dialog.dismiss();
+//            }
+//        });
+//        builder.setNegativeButton("NO", null);
+//        AlertDialog alertDialog = builder.create();
+//        alertDialog.show();
+        return;
     }
 
     public class DBHelper extends SQLiteOpenHelper {

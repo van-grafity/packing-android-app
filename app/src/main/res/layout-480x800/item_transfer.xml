@@ -37,14 +37,15 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="PTRF-2311-004"
-                    android:textAppearance="@style/TextAppearance.Bold16"
+                    android:textAppearance="@style/TextAppearance.Bold20"
                     android:textColor="@color/colorPrimary"
                     android:textStyle="bold" />
 
                 <androidx.cardview.widget.CardView
+                    android:layout_marginTop="6dp"
+                    android:layout_marginBottom="10dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_margin="4dp"
                     android:layout_alignParentRight="true"
                     android:clickable="true"
                     android:elevation="16dp"
@@ -127,7 +128,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:maxLines="3"
-                        android:text="Pallet From Factory :  "
+                        android:text="Pallet From :  "
                         android:textAppearance="@style/TextAppearance.Regular12" />
 
                     <TextView

@@ -61,6 +61,7 @@ public class PalletLoadAdapter extends RecyclerView.Adapter<PalletLoadAdapter.Pa
             holder.tvCartons.setText(String.valueOf(totalCartons));
             holder.tvPcs.setText(String.valueOf(totalPcs));
         } else {
+            holder.btnItemView.setVisibility(View.GONE);
             holder.tvCartons.setText("-");
             holder.tvPcs.setText("-");
         }
@@ -109,6 +110,7 @@ public class PalletLoadAdapter extends RecyclerView.Adapter<PalletLoadAdapter.Pa
         private TextView tvDate;
         private TextView tvCartons;
         private TextView tvPcs;
+        private CardView btnItemView;
 
 
         public PalletLoadViewHolder(@NonNull View itemView) {
@@ -118,6 +120,7 @@ public class PalletLoadAdapter extends RecyclerView.Adapter<PalletLoadAdapter.Pa
             tvDate = itemView.findViewById(R.id.tv_datetime_create_at);
             tvCartons = itemView.findViewById(R.id.tv_total_carton);
             tvPcs = itemView.findViewById(R.id.tv_total_pcs);
+            btnItemView = itemView.findViewById(R.id.btn_item_transfer_note);
 
         }
     }

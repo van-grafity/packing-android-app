@@ -22,7 +22,7 @@ public interface APIService {
 
     @FormUrlEncoded
     @POST("pallet-receive")
-    Call<APIResponse> createPalletReceive(@Field("pallet_transfer_id") int palletTransferId, @Field("rack") int rack, @Field("received_by") String receivedBy, @Field("pallet_barcode") String palletBarcode);
+    Call<APIResponse> createPalletReceive(@Field("pallet_transfer_id") int palletTransferId, @Field("rack") int rack, @Field("received_by") String receivedBy, @Field("pallet_barcode") String palletBarcode, @Field("updated_by") int updateId);
 
     @GET("pallet-receive/" + "search-pallet")
     Call<APIResponse> searchPalletReceive(@Query("pallet_barcode") String palletBarcode);

@@ -41,10 +41,11 @@
                     android:textStyle="bold" />
 
                 <androidx.cardview.widget.CardView
+                    android:layout_marginTop="6dp"
+                    android:layout_marginBottom="10dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
-                    android:layout_margin="4dp"
                     android:clickable="true"
                     android:elevation="16dp"
                     android:focusable="true"
@@ -127,7 +128,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:maxLines="3"
-                        android:text="Pallet From Factory :  "
+                        android:text="Pallet From :  "
                         android:textAppearance="@style/TextAppearance.Regular12" />
 
                     <TextView

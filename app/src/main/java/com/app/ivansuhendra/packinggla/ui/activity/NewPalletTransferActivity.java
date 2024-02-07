@@ -69,7 +69,7 @@ public class NewPalletTransferActivity extends AppCompatActivity {
                     alertDialogBuilder
                             .setMessage(apiResponse.getMessage())
                             .setCancelable(false)
-                            .setNeutralButton("Ok", new DialogInterface.OnClickListener() {
+                            .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int id) {
                                     finish();
                                 }
@@ -175,7 +175,7 @@ public class NewPalletTransferActivity extends AppCompatActivity {
                             alertDialogBuilder
                                     .setMessage("This Pallet has been used. Please Check on Pallet to Transfer List")
                                     .setCancelable(false)
-                                    .setNeutralButton("Ok", new DialogInterface.OnClickListener() {
+                                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                                         public void onClick(DialogInterface dialog, int id) {
                                             finish();
                                         }
@@ -189,7 +189,7 @@ public class NewPalletTransferActivity extends AppCompatActivity {
                             alertDialogBuilder
                                     .setMessage(apiResponse.getMessage())
                                     .setCancelable(false)
-                                    .setNeutralButton("Ok", new DialogInterface.OnClickListener() {
+                                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                                         public void onClick(DialogInterface dialog, int id) {
                                             finish();
                                         }
