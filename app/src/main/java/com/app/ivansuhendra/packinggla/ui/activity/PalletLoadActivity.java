@@ -1,6 +1,7 @@
 package com.app.ivansuhendra.packinggla.ui.activity;
 
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -9,6 +10,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -116,14 +118,31 @@ public class PalletLoadActivity extends AppCompatActivity {
 
     private void getData(String palletNo) {
         transferViewModel.getPalletLoadData(palletNo).observe(this, apiResponse -> {
+            if (apiResponse.getStatus().equals("error")){
+                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(PalletLoadActivity.this);
+                alertDialogBuilder
+                        .setMessage(apiResponse.getMessage())
+                        .setCancelable(false)
+                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                finish();
+                            }
+                        });
 
-            binding.bgStatus.setBackgroundColor(Color.parseColor("#" + apiResponse.getData().getPalletTransfer().getColorCode()));
-            binding.tvStatusProgressLayer.setText(apiResponse.getData().getPalletTransfer().getStatus());
-            binding.tvPalletNo.setText("No. "+apiResponse.getData().getPalletTransfer().getPalletSerialNumber());
-            binding.tvRackLocation.setText(apiResponse.getData().getPalletTransfer().getRackNo());
-            binding.tvLocationFrom.setText(apiResponse.getData().getPalletTransfer().getLocationFrom());
-            binding.tvTotalCarton.setText(apiResponse.getData().getPalletTransfer().getTotalCarton());
-            setDataAdapter(apiResponse.getData().getPalletTransfer().getTransferNotes());
+                AlertDialog alertDialog = alertDialogBuilder.create();
+                alertDialog.show();
+                if (progressDialog != null && progressDialog.isShowing()) {
+                    progressDialog.cancel();
+                }
+            }else {
+                binding.bgStatus.setBackgroundColor(Color.parseColor("#" + apiResponse.getData().getPalletTransfer().getColorCode()));
+                binding.tvStatusProgressLayer.setText(apiResponse.getData().getPalletTransfer().getStatus());
+                binding.tvPalletNo.setText("No. "+apiResponse.getData().getPalletTransfer().getPalletSerialNumber());
+                binding.tvRackLocation.setText(apiResponse.getData().getPalletTransfer().getRackNo());
+                binding.tvLocationFrom.setText(apiResponse.getData().getPalletTransfer().getLocationFrom());
+                binding.tvTotalCarton.setText(apiResponse.getData().getPalletTransfer().getTotalCarton());
+                setDataAdapter(apiResponse.getData().getPalletTransfer().getTransferNotes());
+            }
         });
     }
 

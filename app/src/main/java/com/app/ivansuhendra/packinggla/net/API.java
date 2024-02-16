@@ -48,7 +48,7 @@ public class API {
 
         Retrofit retrofit = new Retrofit.Builder()
                 .client(okHttpClient)
-                .baseUrl("http://192.168.5.236/packing-app/public" + "/api/")
+                .baseUrl("http://192.168.5.236" + "/api/")
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .build();
         return retrofit.create(APIService.class);
@@ -77,7 +77,7 @@ public class API {
     static Converter<ResponseBody, BadRequest> getErrorConverter() {
         if (ERROR_CONVERTER == null) {
             Retrofit retrofit = new Retrofit.Builder()
-                    .baseUrl("http://192.168.5.236/packing-app/public" + "/api/")
+                    .baseUrl("http://192.168.5.236" + "/api/")
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
 

@@ -44,7 +44,7 @@
                         android:id="@+id/tvDept"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Pallet Transfer Detail"
+                        android:text="Pallet  Detail"
                         android:textAppearance="@style/TextAppearance.Bold18"
                         android:textColor="@android:color/white" />
 

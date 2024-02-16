@@ -21,6 +21,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.app.ivansuhendra.packinggla.MainActivity;
 import com.app.ivansuhendra.packinggla.ui.activity.PalletReceiveDetailActivity;
+import com.app.ivansuhendra.packinggla.ui.activity.PalletTransferDetailActivity;
 import com.app.ivansuhendra.packinggla.ui.activity.ScanQrActivity;
 import com.app.ivansuhendra.packinggla.adapter.PalletTransferfAdapter;
 import com.app.ivansuhendra.packinggla.databinding.FragmentReceiveBinding;
@@ -121,7 +122,9 @@ public class ReceiveFragment extends Fragment {
                 palletTransferAdapter = new PalletTransferfAdapter(getActivity(), apiResponse.getData().getPalletReceive(), new PalletTransferfAdapter.itemAdapterOnClickHandler() {
                     @Override
                     public void onClick(PalletTransfer palletTransfer, View view, int position) {
-                        Toast.makeText(getActivity(), palletTransfer.getTransactionNumber(), Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(getActivity(), PalletTransferDetailActivity.class);
+                        intent.putExtra(GlobalVars.PALLET_TRANSFER_LIST, palletTransfer);
+                        startActivity(intent);
                     }
                 });
                 binding.rvPalletReceive.setAdapter(palletTransferAdapter);
