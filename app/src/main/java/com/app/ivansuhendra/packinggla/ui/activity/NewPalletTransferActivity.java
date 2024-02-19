@@ -145,6 +145,7 @@ public class NewPalletTransferActivity extends AppCompatActivity {
         ArrayAdapter<Location> toAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, locations);
         toAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         binding.spLocationTo.setAdapter(toAdapter);
+        binding.spLocationTo.setSelection(2);
     }
 
     private void showLoadingAndDelayApiCall(String palletSerialNumber) {

@@ -34,6 +34,12 @@
         <item name="android:windowFullscreen">true</item>
     </style>
 
+    <style name="SpinnerTheme" parent="Theme.AppCompat.Light">
+        <item name="colorControlNormal">#000000</item>
+        <item name="colorControlActivated">#000000</item>
+        <item name="colorControlHighlight">#000000</item>
+    </style>
+
     <style name="TextAppearance.Regular8" parent="android:TextAppearance">
         <!-- Custom Attr-->
         <item name="fontPath">fonts/Lato-Regular.ttf</item>

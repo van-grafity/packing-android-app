@@ -31,6 +31,7 @@
                 <ImageView
                     android:id="@+id/ivPicture"
                     android:layout_width="60dp"
+                    android:src="@drawable/ic_account"
                     android:layout_height="60dp" />
             </androidx.cardview.widget.CardView>
 
@@ -245,7 +246,7 @@
                         android:layout_height="34dp"
                         android:layout_alignParentRight="true"
                         android:layout_alignParentBottom="true"
-                        android:src="@drawable/ic_load" />
+                        android:src="@drawable/ic_shipping" />
                 </RelativeLayout>
             </androidx.cardview.widget.CardView>
 

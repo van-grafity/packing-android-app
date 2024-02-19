@@ -126,9 +126,11 @@
                 android:id="@+id/sp_location_from"
                 android:layout_width="match_parent"
                 android:layout_height="46dp"
-                android:background="@null"
                 android:hint="Remark"
-                android:visibility="visible" />
+                android:theme="@style/SpinnerTheme"
+                android:visibility="visible" >
+
+            </Spinner>
 
             <androidx.legacy.widget.Space
                 android:layout_width="match_parent"
@@ -150,7 +152,6 @@
                 android:id="@+id/sp_location_to"
                 android:layout_width="match_parent"
                 android:layout_height="46dp"
-                android:background="@null"
                 android:hint="Remark"
                 android:visibility="visible" />
         </LinearLayout>
