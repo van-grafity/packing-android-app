@@ -46,7 +46,7 @@ public interface APIService {
 
     @FormUrlEncoded
     @PUT("pallet-transfer/" + "transfer-note-update")
-    Call<APIResponse> updateTransferNote(@Field("pallet_transfer_id") int palletTransferId, @Field("transfer_note_id") int transferNoteId, @Field("carton_barcode_id[]") Integer[] barcodeIds);
+    Call<APIResponse> updateTransferNote(@Field("pallet_transfer_id") int palletTransferId, @Field("transfer_note_id") int transferNoteId, @Field("carton_barcode_id[]") Integer[] barcodeIds, @Field("updated_by") int updateId);
 
     @FormUrlEncoded
     @POST("pallet-transfer/" + "transfer-note-store")

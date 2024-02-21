@@ -18,7 +18,7 @@
             android:title="@string/menu_receive" />
         <item
             android:id="@+id/nav_load"
-            android:icon="@drawable/ic_load"
+            android:icon="@drawable/ic_shipping"
             android:title="@string/menu_load" />
         <item
             android:id="@+id/nav_logout"

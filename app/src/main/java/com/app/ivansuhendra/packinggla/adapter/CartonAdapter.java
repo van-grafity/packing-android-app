@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -65,6 +66,7 @@ public class CartonAdapter extends RecyclerView.Adapter<CartonAdapter.CartonView
         holder.tvGl.setText(model.getGlNo());
         holder.tvContent.setText(model.getContent());
         holder.tvQty.setText(String.valueOf(model.getPcs()));
+        holder.ivCarton.setAlpha(127);
 
 //        holder.btnItemView.setEnabled(isClickable); // Atur keadaan klik berdasarkan status
         if (isClickable) {
@@ -100,6 +102,7 @@ public class CartonAdapter extends RecyclerView.Adapter<CartonAdapter.CartonView
         TextView tvContent;
         TextView tvQty;
         CardView btnItemView;
+        ImageView ivCarton;
 
         public CartonViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -109,6 +112,7 @@ public class CartonAdapter extends RecyclerView.Adapter<CartonAdapter.CartonView
             tvGl = itemView.findViewById(R.id.tv_gl);
             tvContent = itemView.findViewById(R.id.tv_content);
             tvQty = itemView.findViewById(R.id.tv_qty);
+            ivCarton = itemView.findViewById(R.id.iv_carton);
 
             btnItemView = itemView.findViewById(R.id.btnCarton);
         }

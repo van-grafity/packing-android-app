@@ -186,7 +186,7 @@ public class PalletTransferRepository {
 
     public LiveData<APIResponse> updateTransferNoteResponse(int palletTransferId, int transferNoteId, Integer[] barcodeIds) {
         final MutableLiveData<APIResponse> mutableLiveData = new MutableLiveData<>();
-        API.service().updateTransferNote(palletTransferId, transferNoteId, barcodeIds).enqueue(new APICallback<APIResponse>(mContext) {
+        API.service().updateTransferNote(palletTransferId, transferNoteId, barcodeIds, API.currentUser(mContext).getId()).enqueue(new APICallback<APIResponse>(mContext) {
             @Override
             protected void onSuccess(APIResponse apiResponse) {
                 mutableLiveData.setValue(apiResponse);

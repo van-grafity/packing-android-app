@@ -74,6 +74,7 @@ public class PalletLoadActivity extends AppCompatActivity {
                             progressDialog.dismiss(); // Dismiss progress dialog after receiving response
                             // Handle API response here
                             Toast.makeText(PalletLoadActivity.this, apiResponse.getMessage(), Toast.LENGTH_SHORT).show();
+                            finish();
                         }
                     });
                 } else {
