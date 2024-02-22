@@ -149,7 +149,7 @@ public class PalletTransferDetailActivity extends AppCompatActivity {
 
             if (apiResponse.getData().getPalletTransfer().getTransferNotes().size() != 0) {
 
-                setupTransferNoteAdapter(apiResponse.getData().getPalletTransfer().getTransferNotes());
+                setupTransferNoteAdapter(apiResponse.getData().getPalletTransfer().getTransferNotes(), apiResponse.getData().getPalletTransfer());
 
                 updateViewState(ViewState.DATA_AVAILABLE);
 //                && apiResponse.getData().getPalletTransfer().getTransferNotes().size() != 0
@@ -170,12 +170,12 @@ public class PalletTransferDetailActivity extends AppCompatActivity {
         });
     }
 
-    private void setupTransferNoteAdapter(List<TransferNote> transferNotes) {
+    private void setupTransferNoteAdapter(List<TransferNote> transferNotes, PalletTransfer palletTransfer) {
         mAdapter = new TransferNoteAdapter(this, transferNotes, getPalletSerialNumber(), new TransferNoteAdapter.onItemClickListener() {
             @Override
             public void onClick(View view, int position, TransferNote transferNote) {
                 Intent intent = new Intent(PalletTransferDetailActivity.this, TransferNoteActivity.class);
-                intent.putExtra(GlobalVars.PALLET_TRANSFER_LIST, mPallet);
+                intent.putExtra(GlobalVars.PALLET_TRANSFER_LIST, palletTransfer);
                 intent.putExtra(GlobalVars.TRANSFER_NOTE_LIST, transferNote);
                 startActivity(intent);
                 finish();
@@ -240,9 +240,13 @@ public class PalletTransferDetailActivity extends AppCompatActivity {
 
     private void performCompletingAction() {
         // ...
+        progressDialog = GlobalVars.pgDialog(PalletTransferDetailActivity.this);
         transferViewModel.completePreparationLiveData(mId).observe(this, apiResponse -> {
             Toast.makeText(PalletTransferDetailActivity.this, apiResponse.getMessage(), Toast.LENGTH_SHORT).show();
             finish();
+            if (progressDialog != null && progressDialog.isShowing()) {
+                progressDialog.cancel();
+            }
         });
     }
 }

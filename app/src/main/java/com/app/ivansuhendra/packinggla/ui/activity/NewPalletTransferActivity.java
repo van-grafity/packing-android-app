@@ -174,7 +174,7 @@ public class NewPalletTransferActivity extends AppCompatActivity {
                         if (apiResponse == null) {
                             AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(NewPalletTransferActivity.this);
                             alertDialogBuilder
-                                    .setMessage("This Pallet has been used. Please Check on Pallet to Transfer List")
+                                    .setMessage(apiResponse.getMessage())
                                     .setCancelable(false)
                                     .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                                         public void onClick(DialogInterface dialog, int id) {
