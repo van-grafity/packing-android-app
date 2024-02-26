@@ -21,6 +21,23 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.PackingGLA"
         android:usesCleartextTraffic="${usesCleartextTraffic}">
+        <service
+            android:name=".NotifFirebaseMessagingService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_channel_id"
+            android:value="default" />
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@drawable/ic_packing" />
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_color"
+            android:resource="@color/purple_200" />
         <activity
             android:name=".ui.activity.PalletLoadActivity"
             android:exported="false" />

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "504946126067",
+    "project_id": "packing-gla",
+    "storage_bucket": "packing-gla.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:504946126067:android:c2e8bac0af4a787dab5b86",
+        "android_client_info": {
+          "package_name": "com.app.ivansuhendra.packinggla"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBDxccLzpGptsP0IV2vSQystDEoLMlXBNQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
