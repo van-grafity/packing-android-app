@@ -12,6 +12,7 @@ import com.github.ybq.android.spinkit.style.FoldingCube;
 
 public class GlobalVars {
     public static final String PALLET_TRANSFER_LIST = "pallet transfer list";
+    public static final String PALLET_RECEIVE_LIST = "pallet receive list";
     public static final String TRANSFER_NOTE_LIST = "transfer note list";
     public static final String PLT_CODE = "pallet_code";
     public static final String PREF_USER = "pref:user";

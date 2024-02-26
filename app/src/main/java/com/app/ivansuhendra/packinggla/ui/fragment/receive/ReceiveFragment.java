@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,8 +20,12 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.app.ivansuhendra.packinggla.MainActivity;
+import com.app.ivansuhendra.packinggla.adapter.PalletReceiveAdapter;
+import com.app.ivansuhendra.packinggla.model.PalletReceive;
 import com.app.ivansuhendra.packinggla.ui.activity.PalletReceiveDetailActivity;
 import com.app.ivansuhendra.packinggla.ui.activity.PalletTransferDetailActivity;
 import com.app.ivansuhendra.packinggla.ui.activity.ScanQrActivity;
@@ -31,13 +37,17 @@ import com.app.ivansuhendra.packinggla.utils.GlobalVars;
 import com.app.ivansuhendra.packinggla.viewmodel.TransferViewModel;
 import com.google.android.material.snackbar.Snackbar;
 
+import java.util.ArrayList;
+
 public class ReceiveFragment extends Fragment {
 
     private FragmentReceiveBinding binding;
-    private PalletTransferfAdapter palletTransferAdapter;
+    private PalletTransferfAdapter palletReceiveAdapter;
     private ProgressDialog progressDialog;
     private Snackbar snackbar;
+    private boolean isLoading = false;
     private TransferViewModel transferViewModel;
+    private int currentPage = 1;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
 
@@ -45,39 +55,74 @@ public class ReceiveFragment extends Fragment {
 
         binding = FragmentReceiveBinding.inflate(inflater, container, false);
 
-        binding.btnItemReceive.setOnClickListener(new View.OnClickListener() {
+        View root = binding.getRoot();
+
+        setupRecyclerView();
+
+        // Initialize ViewModel and observe data changes
+        transferViewModel = new ViewModelProvider(this).get(TransferViewModel.class);
+        getActivity().runOnUiThread(new Runnable() {
             @Override
-            public void onClick(View v) {
-                startActivity(new Intent(getActivity(), PalletReceiveDetailActivity.class));
+            public void run() {
+                progressDialog = GlobalVars.pgDialog((MainActivity) getActivity());
             }
         });
 
+        binding.swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                progressDialog = GlobalVars.pgDialog((MainActivity) getActivity());
+                loadInitialData("");
+                binding.editQuery.setText("");
+                binding.swipeRefreshLayout.setRefreshing(false);
+            }
+        });
+        loadInitialData("");
 
-        View root = binding.getRoot();
-
-        if (!isNetworkAvailable()) {
-            showNoNetworkMessage();
-        } else {
-            getActivity().runOnUiThread(new Runnable() {
-                public void run() {
-                    progressDialog = GlobalVars.pgDialog((MainActivity) getActivity());
+        // Implement scroll listener to load more data as user scrolls
+        binding.rvPalletReceive.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                if (!recyclerView.canScrollVertically(1) && !isLoading) {
+                    // Reached end of list, load more data
+                    loadMoreData("");
                 }
-            });
-            setupRecyclerView();
+            }
+        });
 
-            binding.btnNewPalletReceive.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(getActivity(), ScanQrActivity.class);
-                    intent.putExtra(GlobalVars.PLT_CODE, "RECEIVE_CODE");
-                    startActivity(intent);
-                }
-            });
+        binding.btnNewPalletReceive.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), ScanQrActivity.class);
+                intent.putExtra(GlobalVars.PLT_CODE, "RECEIVE_CODE");
+                startActivity(intent);
+            }
+        });
 
-            transferViewModel = new ViewModelProvider(this).get(TransferViewModel.class);
+        transferViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
+            @Override
+            public void onChanged(@Nullable String s) {
+                // Handle text changes if needed
+            }
+        });
 
-            loadDataTransferList();
-        }
+        binding.editQuery.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                String query = editable.toString().trim();
+                // Check if the query is not empty and if the user pressed enter
+                loadInitialData(query);
+            }
+        });
         return root;
     }
 
@@ -86,59 +131,45 @@ public class ReceiveFragment extends Fragment {
         super.onCreate(savedInstanceState);
     }
 
-    private void showNoNetworkMessage() {
-        snackbar = Snackbar.make(getActivity().findViewById(android.R.id.content), "Tidak ada koneksi internet. Coba lagi?", Snackbar.LENGTH_INDEFINITE);
-        snackbar.setAction("Reload", new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        if (isNetworkAvailable()) {
-                            setupRecyclerView();
-                            loadDataTransferList();
-                        } else {
-                            showNoNetworkMessage();
-                        }
-                    }
-                })
-                .show();
-    }
-
     private void setupRecyclerView() {
-        binding.rvPalletReceive.setLayoutManager(new GridLayoutManager(getActivity(), 2, LinearLayoutManager.VERTICAL, false));
+        palletReceiveAdapter = new PalletTransferfAdapter(getActivity(), new ArrayList<>(), new PalletTransferfAdapter.itemAdapterOnClickHandler() {
+            @Override
+            public void onClick(PalletTransfer palletReceive, View view, int position) {
+                Intent intent = new Intent(getActivity(), PalletTransferDetailActivity.class);
+                intent.putExtra(GlobalVars.PALLET_TRANSFER_LIST, palletReceive);
+                startActivity(intent);
+            }
+        });
+
+        GridLayoutManager layoutManager = new GridLayoutManager(getActivity(), 2, LinearLayoutManager.VERTICAL, false);
+        binding.rvPalletReceive.setLayoutManager(layoutManager);
+        binding.rvPalletReceive.setAdapter(palletReceiveAdapter);
     }
 
-    private void filterData(String query) {
-        // Implement filtering logic here based on the search query
-        // You might want to filter the data in your ViewModel and update the RecyclerView accordingly
-//        palletTransferViewModel.setSearchQuery(query);
-    }
-
-    private void loadDataTransferList() {
-//        snackbar.dismiss(); // Tutup Snackbar setelah berhasil reload
-
-        transferViewModel = new ViewModelProvider(this).get(TransferViewModel.class);
-        transferViewModel.getPalletReceiveLiveData(100, 1, "").observe(getViewLifecycleOwner(), new Observer<APIResponse>() {
+    private void loadInitialData(String query) {
+        transferViewModel.getPalletTransferLiveData(1, query).observe(getViewLifecycleOwner(), new Observer<APIResponse>() {
             @Override
             public void onChanged(APIResponse apiResponse) {
-                palletTransferAdapter = new PalletTransferfAdapter(getActivity(), apiResponse.getData().getPalletReceive(), new PalletTransferfAdapter.itemAdapterOnClickHandler() {
-                    @Override
-                    public void onClick(PalletTransfer palletTransfer, View view, int position) {
-                        Intent intent = new Intent(getActivity(), PalletTransferDetailActivity.class);
-                        intent.putExtra(GlobalVars.PALLET_TRANSFER_LIST, palletTransfer);
-                        startActivity(intent);
-                    }
-                });
-                binding.rvPalletReceive.setAdapter(palletTransferAdapter);
+                palletReceiveAdapter.setPalletTransfers(apiResponse.getData().getPalletTransfers());
                 if (progressDialog != null && progressDialog.isShowing()) {
                     progressDialog.cancel();
                 }
             }
         });
+
     }
 
-    private boolean isNetworkAvailable() {
-        ConnectivityManager connectivityManager = (ConnectivityManager) requireActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
-        return networkInfo != null && networkInfo.isConnected();
+    private void loadMoreData(String query) {
+        currentPage++;
+        transferViewModel.getPalletTransferLiveData(currentPage, query).observe(getViewLifecycleOwner(), new Observer<APIResponse>() {
+            @Override
+            public void onChanged(APIResponse apiResponse) {
+                palletReceiveAdapter.addPalletTransfers(apiResponse.getData().getPalletTransfers());
+                if (progressDialog != null && progressDialog.isShowing()) {
+                    progressDialog.cancel();
+                }
+            }
+        });
     }
 
     @Override
@@ -150,6 +181,6 @@ public class ReceiveFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        loadDataTransferList();
+        loadInitialData("");
     }
 }

@@ -18,7 +18,7 @@ public class APIModels {
     private Carton carton;
 
     @SerializedName("pallet_receive_list")
-    private ArrayList<PalletTransfer> palletReceive;
+    private ArrayList<PalletReceive> palletReceive;
 
     @SerializedName("locations")
     private ArrayList<Location> locations;
@@ -45,7 +45,7 @@ public class APIModels {
         return carton;
     }
 
-    public ArrayList<PalletTransfer> getPalletReceive() {
+    public ArrayList<PalletReceive> getPalletReceive() {
         return palletReceive;
     }
 

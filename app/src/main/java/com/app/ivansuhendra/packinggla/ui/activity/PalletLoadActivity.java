@@ -74,7 +74,7 @@ public class PalletLoadActivity extends AppCompatActivity {
                             progressDialog.dismiss(); // Dismiss progress dialog after receiving response
                             // Handle API response here
                             Toast.makeText(PalletLoadActivity.this, apiResponse.getMessage(), Toast.LENGTH_SHORT).show();
-                            finish();
+                            getData(binding.tvPalletNo.getText().toString().trim());
                         }
                     });
                 } else {
@@ -92,13 +92,8 @@ public class PalletLoadActivity extends AppCompatActivity {
     }
 
     private void handleScannedResult(String scannedResult) {
-        // Handle scanned result here
-        Toast.makeText(PalletLoadActivity.this, scannedResult, Toast.LENGTH_SHORT).show();
         // Perform any additional actions based on the scanned result
         getData(scannedResult);
-        if (progressDialog != null && progressDialog.isShowing()) {
-            progressDialog.cancel();
-        }
     }
 
     @Override
@@ -107,7 +102,6 @@ public class PalletLoadActivity extends AppCompatActivity {
         if (requestCode == REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
                 String scannedResult = data.getStringExtra("scannedLoad");
-                Toast.makeText(PalletLoadActivity.this, scannedResult, Toast.LENGTH_SHORT).show();
                 if (progressDialog != null && progressDialog.isShowing()) {
                     progressDialog.cancel();
                 }
@@ -138,13 +132,67 @@ public class PalletLoadActivity extends AppCompatActivity {
             }else {
                 binding.bgStatus.setBackgroundColor(Color.parseColor("#" + apiResponse.getData().getPalletTransfer().getColorCode()));
                 binding.tvStatusProgressLayer.setText(apiResponse.getData().getPalletTransfer().getStatus());
-                binding.tvPalletNo.setText("No. "+apiResponse.getData().getPalletTransfer().getPalletSerialNumber());
+                binding.tvPalletNo.setText(apiResponse.getData().getPalletTransfer().getPalletSerialNumber());
                 binding.tvRackLocation.setText(apiResponse.getData().getPalletTransfer().getRackNo());
                 binding.tvLocationFrom.setText(apiResponse.getData().getPalletTransfer().getLocationFrom());
                 binding.tvTotalCarton.setText(apiResponse.getData().getPalletTransfer().getTotalCarton());
-                setDataAdapter(apiResponse.getData().getPalletTransfer().getTransferNotes());
+
+                if (!allTransferNotesWithoutCartons(apiResponse.getData().getPalletTransfer().getTransferNotes())) {
+                    setDataAdapter(apiResponse.getData().getPalletTransfer().getTransferNotes());
+                } else {
+                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(PalletLoadActivity.this);
+                    alertDialogBuilder
+                            .setMessage("Carton is Empty!")
+                            .setCancelable(false)
+                            .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    finish();
+                                }
+                            });
+
+                    AlertDialog alertDialog = alertDialogBuilder.create();
+                    alertDialog.show();
+                }
+                if (progressDialog != null && progressDialog.isShowing()) {
+                    progressDialog.cancel();
+                }
+//                for (TransferNote transferNote : apiResponse.getData().getPalletTransfer().getTransferNotes()) {
+//                    if (transferNote.getCarton() == null || transferNote.getCarton().isEmpty()) {
+//                        // Handle case when cartons for this transfer note are null or empty
+//                        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(PalletLoadActivity.this);
+//                        alertDialogBuilder
+//                                .setMessage("Pallet is Empty")
+//                                .setCancelable(false)
+//                                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+//                                    public void onClick(DialogInterface dialog, int id) {
+//                                        finish();
+//                                    }
+//                                });
+//
+//                        AlertDialog alertDialog = alertDialogBuilder.create();
+//                        alertDialog.show();
+//                        if (progressDialog != null && progressDialog.isShowing()) {
+//                            progressDialog.cancel();
+//                        }
+//                    } else {
+//                        // Handle case when cartons for this transfer note are not empty
+//                        setDataAdapter(apiResponse.getData().getPalletTransfer().getTransferNotes());
+//                        if (progressDialog != null && progressDialog.isShowing()) {
+//                            progressDialog.cancel();
+//                        }
+//                    }
+//                }
             }
         });
+    }
+
+    public boolean allTransferNotesWithoutCartons(ArrayList<TransferNote> transferNotes) {
+        for (TransferNote note : transferNotes) {
+            if (note.getCarton() != null && !note.getCarton().isEmpty()) {
+                return false; // Jika salah satu transfer note memiliki cartons, kembalikan false
+            }
+        }
+        return true; // Jika tidak ada transfer note yang memiliki cartons, kembalikan true
     }
 
     private void setDataAdapter(List<TransferNote> transferNotes) {
