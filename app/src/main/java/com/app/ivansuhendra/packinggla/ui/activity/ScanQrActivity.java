@@ -5,14 +5,18 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import com.app.ivansuhendra.packinggla.databinding.ActivityScanQrBinding;
+import com.app.ivansuhendra.packinggla.databinding.ToolbarBinding;
+import com.app.ivansuhendra.packinggla.databinding.ToolbarDetailBinding;
 import com.app.ivansuhendra.packinggla.utils.GlobalVars;
 import com.budiyev.android.codescanner.CodeScanner;
 import com.budiyev.android.codescanner.DecodeCallback;
@@ -24,11 +28,14 @@ public class ScanQrActivity extends AppCompatActivity {
     private ActivityScanQrBinding binding;
     private CodeScanner mCodeScanner;
     private String serialCode;
+    private String title;
+    private ToolbarDetailBinding toolbarBinding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityScanQrBinding.inflate(LayoutInflater.from(ScanQrActivity.this));
+        toolbarBinding = binding.toolbar;
         setContentView(binding.getRoot());
         setupPermissions();
 
@@ -36,13 +43,30 @@ public class ScanQrActivity extends AppCompatActivity {
             Bundle extras = getIntent().getExtras();
             if(extras == null) {
                 serialCode = "";
+                title = "";
             } else {
                 serialCode = extras.getString(GlobalVars.PLT_CODE);
+                title = extras.getString("STR_NAME");
             }
         } else {
             serialCode = (String) savedInstanceState.getSerializable("STRING_I_NEED");
+            title = (String) savedInstanceState.getSerializable("STRING_I_NEED");
         }
 
+        setSupportActionBar(toolbarBinding.toolbar);
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayShowTitleEnabled(false);
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
+
+        if (serialCode.equals("PLT_CODE")) {
+            toolbarBinding.toolbar.setTitle("Scan Pallet");
+        }else if (serialCode.equals("RECEIVE_CODE")){
+            toolbarBinding.toolbar.setTitle("Scan Pallet");
+        } else {
+            toolbarBinding.toolbar.setTitle("Scan Carton");
+        }
         mCodeScanner = new CodeScanner(this, binding.scannerView);
         mCodeScanner.setDecodeCallback(new DecodeCallback() {
             @Override
@@ -109,5 +133,15 @@ public class ScanQrActivity extends AppCompatActivity {
         mCodeScanner.releaseResources();
         super.onPause();
         Log.i(TAG, "onPause: unregisterReceiver");
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

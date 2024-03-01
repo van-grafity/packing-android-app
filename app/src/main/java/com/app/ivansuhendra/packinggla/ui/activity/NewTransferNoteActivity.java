@@ -42,6 +42,7 @@ public class NewTransferNoteActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(NewTransferNoteActivity.this, ScanQrActivity.class);
+                intent.putExtra("STR_NAME", "SCAN CARTON");
                 startActivityForResult(intent, REQUEST_SCAN_QR);
             }
         });

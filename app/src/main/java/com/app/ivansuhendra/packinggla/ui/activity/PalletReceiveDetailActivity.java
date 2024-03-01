@@ -8,9 +8,12 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -31,6 +34,7 @@ import com.app.ivansuhendra.packinggla.model.Rack;
 import com.app.ivansuhendra.packinggla.model.TransferNote;
 import com.app.ivansuhendra.packinggla.utils.GlobalVars;
 import com.app.ivansuhendra.packinggla.viewmodel.TransferViewModel;
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 import java.util.ArrayList;
@@ -175,9 +179,31 @@ public class PalletReceiveDetailActivity extends AppCompatActivity implements Ad
             }
         });
 
+        int minHeight = calculateMinimumHeightForBottomSheet();
+        int maxHeight = calculateMaximumHeightForBottomSheet();
+
         dialog = new BottomSheetDialog(this);
         dialog.setContentView(dialogView);
+        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, minHeight);
+        dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE); // Adjust pan when keyboard is shown
+        dialog.setOnShowListener(dialogInterface -> {
+            BottomSheetDialog bottomSheetDialog = (BottomSheetDialog) dialogInterface;
+            FrameLayout bottomSheet = bottomSheetDialog.findViewById(com.google.android.material.R.id.design_bottom_sheet);
+            if (bottomSheet != null) {
+                BottomSheetBehavior.from(bottomSheet).setPeekHeight(maxHeight); // Set maximum height
+            }
+        });
         dialog.show();
+    }
+
+    private int calculateMinimumHeightForBottomSheet() {
+        // Return the desired minimum height for the bottom sheet
+        return getResources().getDimensionPixelSize(R.dimen.bottom_sheet_min_height);
+    }
+
+    private int calculateMaximumHeightForBottomSheet() {
+        // Return the desired maximum height for the bottom sheet
+        return getResources().getDimensionPixelSize(R.dimen.bottom_sheet_max_height);
     }
 
     private void loadDataRackFromServer(String serialNo) {
@@ -243,7 +269,7 @@ public class PalletReceiveDetailActivity extends AppCompatActivity implements Ad
     private void updateUI(APIResponse apiResponse) {
 //        Toast.makeText(PalletReceiveDetailActivity.this, ""+apiResponse.getData().getPalletTransfer().getPalletTransferId(), Toast.LENGTH_SHORT).show();
         // Update UI based on API response
-        if (apiResponse.getStatus().equals("error")){
+        if (apiResponse.getStatus().equals("error")) {
             binding.rlNull.setVisibility(View.GONE);
             AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(PalletReceiveDetailActivity.this);
             alertDialogBuilder
@@ -261,17 +287,17 @@ public class PalletReceiveDetailActivity extends AppCompatActivity implements Ad
                 progressDialog.cancel();
             }
         } else {
-        binding.tvPalletTransferNo.setText(apiResponse.getData().getPalletTransfer().getPalletSerialNumber());
+            binding.tvPalletTransferNo.setText(apiResponse.getData().getPalletTransfer().getPalletSerialNumber());
 //        binding.bgStatus.setBackground(getDrawable(GlobalVars.provideStatus(apiResponse.getData().getPalletTransfer().getStatus())));
-        binding.bgStatus.setBackgroundColor(Color.parseColor("#" + apiResponse.getData().getPalletTransfer().getColorCode()));
-        binding.tvStatusProgressLayer.setText(apiResponse.getData().getPalletTransfer().getStatus());
-        binding.tvPalletNo.setText(apiResponse.getData().getPalletTransfer().getPalletSerialNumber());
-        binding.tvTotalCarton.setText(apiResponse.getData().getPalletTransfer().getTotalCarton());
-        binding.tvLocationFrom.setText(apiResponse.getData().getPalletTransfer().getLocationFrom());
-        palletTransferId = apiResponse.getData().getPalletTransfer().getPalletTransferId(); // Obtain the pallet transfer ID;
-        palletBarcode = apiResponse.getData().getPalletTransfer().getPalletSerialNumber();
-        provideRack();
-        setupTransferNoteAdapter(apiResponse.getData().getPalletTransfer().getTransferNotes(), apiResponse.getData().getPalletTransfer().getPalletSerialNumber());
+            binding.bgStatus.setBackgroundColor(Color.parseColor("#" + apiResponse.getData().getPalletTransfer().getColorCode()));
+            binding.tvStatusProgressLayer.setText(apiResponse.getData().getPalletTransfer().getStatus());
+            binding.tvPalletNo.setText(apiResponse.getData().getPalletTransfer().getPalletSerialNumber());
+            binding.tvTotalCarton.setText(apiResponse.getData().getPalletTransfer().getTotalCarton());
+            binding.tvLocationFrom.setText(apiResponse.getData().getPalletTransfer().getLocationFrom());
+            palletTransferId = apiResponse.getData().getPalletTransfer().getPalletTransferId(); // Obtain the pallet transfer ID;
+            palletBarcode = apiResponse.getData().getPalletTransfer().getPalletSerialNumber();
+            provideRack();
+            setupTransferNoteAdapter(apiResponse.getData().getPalletTransfer().getTransferNotes(), apiResponse.getData().getPalletTransfer().getPalletSerialNumber());
         }
     }
 
