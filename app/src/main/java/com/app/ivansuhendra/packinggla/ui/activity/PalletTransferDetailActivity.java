@@ -66,7 +66,7 @@ public class PalletTransferDetailActivity extends AppCompatActivity {
         String scheme = data != null ? data.getScheme() : ""; // "http"
         String host = data != null ? data.getHost() : ""; // "www.v2ex.com"
         List<String> pathSegments = data != null ? data.getPathSegments() : null;
-        if ((scheme.equals("http")) && (host.equals("192.168.5.236")) && pathSegments != null && pathSegments.size() == 2) {
+        if ((scheme.equals("http")) && (host.equals("packing.glaindonesia.lan")) && pathSegments != null && pathSegments.size() == 2) {
             String idString = pathSegments.get(1); // Get the last segment as the ID
             mId = Integer.parseInt(idString); // Parse the ID string to an integer
             setPalletSerialNumber("");
